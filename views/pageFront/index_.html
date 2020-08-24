@@ -16,23 +16,27 @@
 <body class="home-template">
 	<div class="site-wrapper">
 		<nav class="main-nav overlay clearfix">
-			<a class="blog-logo" href="/PID_Assignment/views/index.html">
+			<a class="blog-logo" href="/PID_Assignment/views/pageFront/index_.html">
 				<img src="/PID_Assignment/views/img/logo.png" alt="Fashion Critiques" />
 			</a>
 			<ul id="menu">
-				<li class="nav-home nav-current" role="presentation"><a href="/PID_Assignment/views/index.html">Home</a>
+				<li class="nav-home nav-current" role="presentation"><a
+						href="/PID_Assignment/views/pageFront/index_.html">首頁</a>
 				</li>
-				<li class="nav-article-example" role="presentation"><a href="/PID_Assignment/views/article.html">Post
-						Example</a></li>
-				<li class="nav-about-us" role="presentation"><a href="/PID_Assignment/views/about.html">Page Example</a>
+				<li class="nav-article-example" role="presentation"><a
+						href="/PID_Assignment/views/pageFront/index_.html">商品列表</a></li>
+				<li class="nav-about-us" role="presentation"><a href="/PID_Assignment/views/pageFront/order.html">訂單</a>
+				<li class="nav-about-us" role="presentation"><a
+						href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 				</li>
-				<li class="nav-author-page" role="presentation"><a href="/PID_Assignment/views/author.html">Author
-						Page</a></li>
 				<span class="socialheader">
-					<a href="#"><span class='symbol'>circletwitterbird</span></a>
+					<a href="">userName</a>
+					<a href="">帳號設定</a>
+					<a href="/PID_Assignment/views/pageFront/login.html">登入</a>
+					<!-- <a href="#"><span class='symbol'>circletwitterbird</span></a>
 					<a href="#"><span class='symbol'>circlefacebook</span></a>
 					<a href="#"><span class='symbol'>circlegoogleplus</span></a>
-					<a href="mailto:wowthemesnet@gmail.com"><span class='symbol'>circleemail</span></a>
+					<a href="mailto:wowthemesnet@gmail.com"><span class='symbol'>circleemail</span></a> -->
 				</span>
 			</ul>
 		</nav>
@@ -58,92 +62,7 @@
 					<div class="grid-item">
 						<article class="post">
 							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
-									<img src="/PID_Assignment/views/img/gravatar.jpg" />
-									<header class="post-header">
-										<h2 class="post-title">
-											標題
-										</h2>
-									</header>
-									<section class="post-excerpt">
-										<p>價格</p>
-									</section>
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="grid-item">
-						<article class="post">
-							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
-									<img src="/PID_Assignment/views/img/gravatar.jpg" />
-									<header class="post-header">
-										<h2 class="post-title">
-											標題
-										</h2>
-									</header>
-									<section class="post-excerpt">
-										<p>價格</p>
-									</section>
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="grid-item">
-						<article class="post">
-							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
-									<img src="/PID_Assignment/views/img/gravatar.jpg" />
-									<header class="post-header">
-										<h2 class="post-title">
-											標題
-										</h2>
-									</header>
-									<section class="post-excerpt">
-										<p>價格</p>
-									</section>
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="grid-item">
-						<article class="post">
-							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
-									<img src="/PID_Assignment/views/img/gravatar.jpg" />
-									<header class="post-header">
-										<h2 class="post-title">
-											標題
-										</h2>
-									</header>
-									<section class="post-excerpt">
-										<p>價格</p>
-									</section>
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="grid-item">
-						<article class="post">
-							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
-									<img src="/PID_Assignment/views/img/gravatar.jpg" />
-									<header class="post-header">
-										<h2 class="post-title">
-											標題
-										</h2>
-									</header>
-									<section class="post-excerpt">
-										<p>價格</p>
-									</section>
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="grid-item">
-						<article class="post">
-							<div class="wrapgriditem">
-								<a href="/PID_Assignment/views/article.html">
+								<a href="/PID_Assignment/views/pageFront/commodity.html">
 									<img src="/PID_Assignment/views/img/gravatar.jpg" />
 									<header class="post-header">
 										<h2 class="post-title">
@@ -158,12 +77,18 @@
 						</article>
 					</div>
 
+
+
 				</div>
 				<!-- 上下頁 -->
 				<nav class="pagination" role="navigation">
-					<a class="newer-posts" href="/PID_Assignment/views/index.html">&larr; Newer Posts</a>
-					<span class="page-number">Page 1 of 2</span>
-					<a class="older-posts" href="/PID_Assignment/views/page2.html">Older Posts &rarr;</a>
+					<button class="newer-posts" type="button" name="a" id="a">&larr; Newer Posts</button>
+					<button type="button" class="btn btn-link">1</button>
+					<button type="button" class="btn btn-link">1</button>
+					<button type="button" class="btn btn-link">1</button>
+					<button type="button" class="btn btn-link">1</button>
+					<button type="button" class="btn btn-link">1</button>
+					<button class="older-posts" type="button" name="a" id="a">Older Posts &rarr;</button>
 				</nav>
 			</div>
 		</main>
@@ -171,7 +96,7 @@
 		<footer class="site-footer clearfix">
 			<a href="#top" id="back-to-top" class="back-top"></a>
 			<div class="text-center">
-				<a href="/PID_Assignment/views/index.html">Nectaria Template</a> &copy; 2016<br />
+				<a href="/PID_Assignment/views/pageFront/index_.html">Nectaria Template</a> &copy; 2016<br />
 				Free HTML Template by <a href="https://wowthemes.net">WowThemes.net</a>
 			</div>
 		</footer>

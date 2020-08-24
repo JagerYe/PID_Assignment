@@ -13,7 +13,7 @@
 		href="https://fonts.googleapis.com/css?family=Roboto:400,300italic,300,400italic,700,700italic|Playfair+Display:400,700,400italic,700italic" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/PID_Assignment/views/css/shopping.css">
+	<link rel="stylesheet" href="/PID_Assignment/views/css/list.css">
 </head>
 
 <body class="author-template">
@@ -40,38 +40,41 @@
 			</ul>
 		</nav>
 		<header style="height: 10px;"></header>
-		<table class="order">
-			<tr>
-				<th class="orderID"></th>
-				<th class="orderDate"></th>
-				<th class="orderPrice"></th>
-			</tr>
-			<tr>
-				<td>訂單編號</td>
-				<td>日期</td>
-				<td>總價</td>
-			</tr>
+
+		<div class="list">
+			<div class="row">
+				<div class="col-4"><strong>訂單編號</strong></div>
+				<div class="col-4"><strong>日期</strong></div>
+				<div class="col-4"><strong>總價</strong></div>
+			</div>
+			<a href="">
+				<div class="row">
+					<div class="col-4">訂單編號</div>
+					<div class="col-4">日期</div>
+					<div class="col-4 total">總價</div>
+				</div>
+			</a>
 			<!-- 預計生成明細用 -->
-			<tr>
-				<td colspan="3">
-					<table class="shoppingCart">
-						<tr>
-							<th class="img">商品圖片</th>
-							<th class="name">名稱</th>
-							<th class="price">單價</th>
-							<th class="quantity">數量</th>
-						</tr>
-						<tr>
-							<td class="commodityImg"><img src="/PID_Assignment/views/img/gravatar.jpg"></td>
-							<td>名稱</td>
-							<td>單價</td>
-							<td>數量</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-		
+			<div>
+				<div class="row">
+					<div class="col-3"><strong>商品圖片</strong></div>
+					<div class="col-3"><strong>名稱</strong></div>
+					<div class="col-3"><strong>單價</strong></div>
+					<div class="col-2"><strong>數量</strong></div>
+					<div class="col-1"></div>
+				</div>
+				<div class="row">
+					<div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
+					<div class="col-3">名稱</div>
+					<div class="col-3">單價</div>
+					<div class="col-2"><input id="commodityQuantity" name="commodityQuantity" type="number" min="0"
+							max="100" value="1"></div>
+					<div class="col-1"></div>
+				</div>
+			</div>
+
+		</div>
+
 		<header style="height: 100px;"></header>
 		<footer class="site-footer clearfix">
 			<a href="#top" id="back-to-top" class="back-top"></a>
