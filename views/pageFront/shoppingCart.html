@@ -7,7 +7,7 @@
 	<title>Nectaria - Free HTML Template by WowThemes.net</title>
 	<meta name="description" content="Thoughts, reviews and ideas since 1999." />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="shortcut icon" href="#">
+	<link rel="icon" href="/PID_Assignment/views/img/logo.png">
 	<link rel="stylesheet" type="text/css" href="/PID_Assignment/views/css/screen.css" />
 	<link rel="stylesheet" type="text/css"
 		href="https://fonts.googleapis.com/css?family=Roboto:400,300italic,300,400italic,700,700italic|Playfair+Display:400,700,400italic,700italic" />
@@ -23,9 +23,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/masonry.min.js"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/jquery.fitvids.js"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/index.js"></script>
 </head>
 
 <body class="author-template">
@@ -53,45 +50,39 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-	
+
 				</ul>
 				<span class="socialheader">
 					<a href="">userName</a>
 					<a href="">帳號設定</a>
 					<a href="/PID_Assignment/views/pageFront/login.html">登入</a>
-					<!-- <a href="#"><span class='symbol'>circletwitterbird</span></a>
-						<a href="#"><span class='symbol'>circlefacebook</span></a>
-						<a href="#"><span class='symbol'>circlegoogleplus</span></a>
-						<a href="mailto:wowthemesnet@gmail.com"><span class='symbol'>circleemail</span></a> -->
 				</span>
 			</div>
 		</nav>
-		<div style="height: 100px;"></div>
+		<br><br><br><br><br><br>
 		<div class="list">
-			<div class="row">
-				<div class="col-3">商品圖片</div>
-				<div class="col-3">名稱</div>
-				<div class="col-3">單價</div>
-				<div class="col-2">數量</div>
-				<div class="col-1"></div>
-			</div>
-			
-			<div class="row">
-				<div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
-				<div class="col-3">名稱</div>
-				<div class="col-3">單價</div>
-				<div class="col-2"><input id="commodityQuantity" name="commodityQuantity" type="number" min="0"
-						max="100" value="1"></div>
-				<div class="col-1"><button id="commodityDelete" name="commodityDelete" type="button"
-						class="btn">刪除</button></div>
-			</div>
+			<ul>
+				<li class="row">
+					<div class="col-3">商品圖片</div>
+					<div class="col-3">名稱</div>
+					<div class="col-3">單價</div>
+					<div class="col-2">數量</div>
+					<div class="col-1"></div>
+				</li>
+			</ul>
+
+
+			<ul id="shoppingCartList">
+
+			</ul>
+
 			<div class="row">
 				<div class="col-6"></div>
 				<div class="col-5 total">總價格:</div>
 				<div class="col-1"><button name="submit" type="submit" class="btn btn-primary">結帳</button></div>
 			</div>
 		</div>
-		<header style="height: 100px;"></header>
+		<br><br>
 		<footer class="site-footer clearfix">
 			<a href="#top" id="back-to-top" class="back-top"></a>
 			<div class="text-center">
@@ -101,5 +92,83 @@
 		</footer>
 	</div>
 </body>
+<script type="module">
+	import { Commodity } from "../js/commodity.js";
+	import { ShoppingCart } from "../js/shoppingCar.js";
+
+	// 假資料-------------------------------------------------------------------------
+	var commoditys = [
+		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
+		new Commodity("12", "abc2", 22, 0, "open", "commodityText", null),
+		new Commodity("13", "abc3", 70, 70, "close", "commodityText", null),
+		new Commodity("14", "abc4", 50, 1, "open", "commodityText", null),
+		new Commodity("15", "abc5", -10, 50, "open", "commodityText", null)
+	];
+
+	var shoppingCar = [
+		new ShoppingCart("11", 3),
+		new ShoppingCart("12", 3),
+		new ShoppingCart("13", 3),
+		new ShoppingCart("14", 3),
+		new ShoppingCart("15", 3),
+		new ShoppingCart("16", 3)
+	];
+	// 假資料-------------------------------------------------------------------------
+
+	function checking(id, quantity) {
+		let commodity = commoditys.find(item => item.commodityID == id);
+		let str = "";
+		if (commodity === undefined) {
+			alert("找不到商品!");
+			return false;
+		}
+
+		if (commodity.commodityPrice <= 0) {
+			str = commodity.commodityName + "的售價有問題";
+		}
+		if (commodity.commodityQuantity <= 0) {
+			str = "目前沒有庫存";
+		}
+		if (commodity.commodityStatus == "close") {
+			str = commodity.commodityName + "已下架";
+		}
+		if (commodity.commodityQuantity < quantity && str.length <= 0) {
+			alert("目前" + commodity.commodityName + "的數量不足" + quantity + "系統會將數量調整為目前庫存量");
+		}
+
+
+		if (str.length > 0) {
+			alert(str);
+		}
+
+		return (str.length > 0) ? false : commodity;
+	}
+
+	$(window).ready(() => {
+		$("#shoppingCartList").empty();
+		shoppingCar.forEach(item => {
+			let commodity = checking(item.commodityID, item.buyQuantity);
+			if (!(commodity)) {
+				return;
+			}
+			let buyQuantity = (item.buyQuantity >= commodity.commodityQuantity) ? commodity.commodityQuantity : item.buyQuantity;
+			$("#shoppingCartList").append(`
+				<li class="row">
+					<div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
+					<div class="col-3">${commodity.commodityName}</div>
+					<div class="col-3">${commodity.commodityPrice}</div>
+					<div class="col-2"><input id="commodityQuantity" name="commodityQuantity" type="number" min="0"
+							max="${commodity.commodityQuantity}" value="${buyQuantity}"></div>
+					<div class="col-1"><button id="commodityDelete" name="commodityDelete" type="button"
+							class="btn commodityDelete">刪除</button></div>
+				</li>
+			`);
+			$(".commodityDelete").click(function (e) {
+				// shoppingCar[$(e).closest("div").index()];
+				alert($(e).closest("li").index());
+			});
+		});
+	});
+</script>
 
 </html>
