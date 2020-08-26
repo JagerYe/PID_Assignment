@@ -8,13 +8,13 @@ export class ShoppingCart {
         return this._commodityID;
     }
     set commodityID(commodityID) {
-        this.commodityID = commodityID;
+        this._commodityID = commodityID;
     }
 
     get buyQuantity() {
         return this._buyQuantity;
     }
     set buyQuantity(buyQuantity) {
-        this.buyQuantity = buyQuantity;
+        this._buyQuantity = buyQuantity;
     }
 }

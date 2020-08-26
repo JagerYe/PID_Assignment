@@ -57,10 +57,9 @@
 				</li>
 
 			</ul>
-			<span class="socialheader">
-				<a href="">userName</a>
-				<a href="">帳號設定</a>
-				<a href="/PID_Assignment/views/pageFront/login.html">登入</a>
+			<span class="socialheader row">
+				<div class="col" id="userName">userName</div>
+				<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
 			</span>
 		</div>
 	</nav>
@@ -109,7 +108,12 @@
 
 </body>
 <script type="module">
-	import { Commodity } from "../js/commodity.js";
+	import { Member } from "../js/models/member.js";
+
+</script>
+<script type="module">
+	import { Commodity } from "../js/models/commodity.js";
+	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
 	var commoditys = [
 		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
 		new Commodity("12", "abc2", 22, 0, "open", "commodityText", null),
@@ -128,19 +132,7 @@
 			if (item.commodityStatus == "close" || item.commodityQuantity <= 0 || item.commodityPrice <= 0) {
 				return;
 			}
-			$(".show").append(
-				`<div class="col-md-4">
-					<a href="/PID_Assignment/views/pageFront/commodity.html?commodityID=${item.commodityID}">
-						<div class="card mb-4 shadow-sm">
-							<img src="/PID_Assignment/views/img/gravatar.jpg">
-							<div class="card-body">
-								<h2>${item._commodityName}</h2>
-								<p class="card-text">${item._commodityPrice}</p>
-							</div>
-						</div>
-					</a>
-				</div>`
-			);
+			$(".show").append(CommodityViewModel.getMenuView(item.commodityID, item._commodityName, item._commodityPrice));
 		});
 	});
 

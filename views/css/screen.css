@@ -2026,10 +2026,12 @@ a.symbol {
 	text-decoration:none;
 }
 span.socialheader {
+	color: white;
+	font-size:20px;
 	float:right;
 }
 .socialheader span {
-	font-size:1.7em;
+	
 	display:inline-block;
 	line-height:43px;
 	margin:0 3px;

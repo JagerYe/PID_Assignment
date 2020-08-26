@@ -1,7 +1,7 @@
-class OrderDetail {
-    constructor(orderID, commodityID, orderCommodityPrice, orderCommodityQuantity) {
+export class OrderDetail {
+    constructor(orderID, commodityNane, orderCommodityPrice, orderCommodityQuantity) {
         this._orderID = orderID;
-        this._commodityID = commodityID;
+        this._commodityNane = commodityNane;
         this._orderCommodityPrice = orderCommodityPrice;
         this._orderCommodityQuantity = orderCommodityQuantity;
     }
@@ -13,11 +13,11 @@ class OrderDetail {
         this._orderID = orderID;
     }
 
-    get commodityID() {
-        return this._commodityID;
+    get commodityNane() {
+        return this._commodityNane;
     }
-    set commodityID(commodityID) {
-        this._commodityID = commodityID;
+    set commodityNane(commodityNane) {
+        this._commodityNane = commodityNane;
     }
 
     get orderCommodityPrice() {

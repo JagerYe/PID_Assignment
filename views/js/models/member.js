@@ -1,4 +1,4 @@
-class Member {
+export class Member {
     constructor(userID, userPassword, userName, userEmail, userPhone) {
         this._userID = userID;
         this._userPassword = userPassword;

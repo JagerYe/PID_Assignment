@@ -23,9 +23,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/masonry.min.js"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/jquery.fitvids.js"></script>
-	<script type="text/javascript" src="/PID_Assignment/views/js/index.js"></script>
 </head>
 
 <body class="author-template">
@@ -55,61 +52,33 @@
 					</li>
 
 				</ul>
-				<span class="socialheader">
-					<a href="">userName</a>
-					<a href="">帳號設定</a>
-					<a href="/PID_Assignment/views/pageFront/login.html">登入</a>
+				<span class="socialheader row">
+					<div class="col" id="userName">userName</div>
+					<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
 				</span>
 			</div>
 		</nav>
 		<br><br><br><br><br><br>
 
-		<div class="list">
-
-
-			<!-- 一項商品 -->
-			<div>
-				<div class="row">
-					<div class="col-3"><strong>商品圖片</strong></div>
-					<div class="col-3"><strong>名稱</strong></div>
-					<div class="col-3"><strong>單價</strong></div>
-					<div class="col-2"><strong>數量</strong></div>
-					<div class="col-1"><strong>狀態</strong></div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<img src="/PID_Assignment/views/img/gravatar.jpg"><br>
-					</div>
-					<div class="col-3"><input id="commodityName" name="commodityName" type="text"></div>
-					<div class="col-3"><input id="commodityPrice" name="commodityPrice" type="number"></div>
-					<div class="col-2"><input id="commodityQuantity" name="commodityQuantity" type="number" min="0"
-							max="100" value="1"></div>
-					<div class="col-1">
-						<select id="select" name="select" class="custom-select">
-							<option value="open">上架</option>
-							<option value="close">下架</option>
-							<option value="delete">刪除</option>
-						</select>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-5">
-						更新圖片
-						<input type="file" name="commodityImg" id="commodityImg">
-					</div>
-					<div class="col-7">
-						<button type="button">更新商品內容</button><br>
-						<textarea id="textarea" name="textarea" cols="40" rows="5" class="form-control"></textarea>
-
-					</div>
-				</div><br>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col-1">
+				<button class="btn btn-danger" type="button" id="btnresetAll">重置所有商品內容</button>
 			</div>
-
-
-			<!-- ----------------------- -->
-
-			<!-- ----------------------- -->
+			<div class="col-1"></div>
+			<div class="col-1">
+				<button class="btn btn-warning" type="button" id="btnUpdateAll">更新所有商品內容</button>
+			</div>
+			<div class="col-1"></div>
+			<div class="col-1">
+				<button class="btn btn-success" type="button" id="btnresetAll">新增商品</button>
+			</div>
+			<div class="col-1"></div>
 		</div>
+
+		<ul class="list" id="list">
+
+		</ul>
 
 	</div>
 
@@ -124,5 +93,71 @@
 	</div>
 
 </body>
+<script type="module">
+	import { Commodity } from "../js/models/commodity.js";
+
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+	var commoditys = [
+		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
+		new Commodity("12", "abc2", 22, 30, "open", "commodityText", null),
+		new Commodity("13", "abc3", 70, 70, "close", "commodityText", null),
+		new Commodity("14", "abc4", 50, 80, "open", "commodityText", null),
+		new Commodity("15", "abc5", 55, 50, "open", "commodityText", null),
+		new Commodity("16", "abc6", 42, 30, "close", "commodityText", null)
+	];
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+	// commodityID, commodityName, commodityPrice, commodityQuantity, commodityStatus, commodityText, commodityImage
+
+
+	$(window).ready(() => {
+		$("#list").empty();
+		commoditys.forEach(item => {
+			$("#list").append(`
+			<li>
+				<div class="row titel">
+					<div class="col-3"><strong>商品圖片</strong></div>
+					<div class="col-3"><strong>名稱</strong></div>
+					<div class="col-3"><strong>單價</strong></div>
+					<div class="col-2"><strong>數量</strong></div>
+					<div class="col-1"><strong>狀態</strong></div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<img src="/PID_Assignment/views/img/gravatar.jpg"><br>
+					</div>
+					<div class="col-3"><input id="commodityName${item.commodityID}" name="commodityName${item.commodityID}" type="text" value="${item.commodityName}"></div>
+					<div class="col-3"><input id="commodityPrice${item.commodityID}" name="commodityPrice${item.commodityID}" type="number" value="${item.commodityPrice}"></div>
+					<div class="col-2"><input id="commodityQuantity${item.commodityID}" name="commodityQuantity${item.commodityID}" type="number" min="0"
+							value="${item.commodityQuantity}"></div>
+					<div class="col-1">
+						<select id="select${item.commodityID}" name="select${item.commodityID}" class="custom-select">
+							<option value="open">上架</option>
+							<option value="close">下架</option>
+							<option value="delete">刪除</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-5">
+						更新圖片
+						<input type="file" name="commodityImg${item.commodityID}" id="commodityImg${item.commodityID}">
+					</div>
+					<div class="col-5">
+						<textarea id="textarea${item.commodityID}" name="textarea${item.commodityID}" cols="40" rows="5" class="form-control">${item.commodityText}</textarea>
+					</div>
+					<div class="col-2"><button class="btn btn-success" type="button" id="btnUpdate${item.commodityID}">更新商品內容</button></div>
+				</div><hr><hr>
+			</li>
+			
+			
+			`);
+
+			$(`#select${item.commodityID}`).val(item.commodityStatus);
+			$(`#btnUpdate${item.commodityID}`).click(function() {
+				alert($(this).closest("li").index());
+			});
+		});
+	});
+</script>
 
 </html>

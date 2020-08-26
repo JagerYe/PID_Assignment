@@ -50,12 +50,11 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-
+	
 				</ul>
-				<span class="socialheader">
-					<a href="">userName</a>
-					<a href="">帳號設定</a>
-					<a href="/PID_Assignment/views/pageFront/login.html">登入</a>
+				<span class="socialheader row">
+					<div class="col" id="userName">userName</div>
+					<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
 				</span>
 			</div>
 		</nav>
@@ -76,7 +75,7 @@
 	</div>
 </body>
 <script type="module">
-	import { Commodity } from "../js/commodity.js"
+	import { Commodity } from "../js/models/commodity.js";
 	var commoditys = [
 		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
 		new Commodity("12", "abc2", 22, 30, "open", "commodityText", null),

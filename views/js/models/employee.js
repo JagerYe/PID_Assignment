@@ -8,13 +8,13 @@ export class Employee {
         return this._empID;
     }
     set empID(empID) {
-        this.empID = empID;
+        this._empID = empID;
     }
 
     get empPassword() {
         return this._empPassword;
     }
     set empPassword(empPassword) {
-        this.empPassword = empPassword;
+        this._empPassword = empPassword;
     }
 }
