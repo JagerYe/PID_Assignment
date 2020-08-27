@@ -1,10 +1,11 @@
 export class Member {
-    constructor(userID, userPassword, userName, userEmail, userPhone) {
+    constructor(userID, userName, userEmail, userPhone, userStatus, userPassword = "") {
         this._userID = userID;
         this._userPassword = userPassword;
         this._userName = userName;
         this._userEmail = userEmail;
         this._userPhone = userPhone;
+        this._userStatus = userStatus;
     }
 
     get userID() {
@@ -42,4 +43,10 @@ export class Member {
         this._userPhone = userPhone;
     }
 
+    get userStatus() {
+        return this._userStatus
+    }
+    set userStatus(userStatus) {
+        this._userStatus = userStatus;
+    }
 }

@@ -1,7 +1,7 @@
 export class OrderViewModel {
     static getOrderView(id, date, total) {
         return `<li class="aOrder">
-                    <div class="row order">
+                    <div class="row" id="aOrder${id}">
                         <div class="col-4">${id}</div>
                         <div class="col-4">${date}</div>
                         <div class="col-2 total">${total}</div>

@@ -1,5 +1,5 @@
 export class Commodity {
-    constructor(commodityID, commodityName, commodityPrice, commodityQuantity, commodityStatus, commodityText, commodityImage) {
+    constructor(commodityID, commodityName="", commodityPrice=0, commodityQuantity=0, commodityStatus="close", commodityText="", commodityImage=null) {
         this._commodityID = commodityID;
         this._commodityName = commodityName;
         this._commodityPrice = commodityPrice;

@@ -1,8 +1,10 @@
 export class Order {
-    constructor(orderID, orderDate, attention) {
+    constructor(orderID, orderDate, attention = false, userId = "", total = 0) {
         this._orderID = orderID;
         this._orderDate = orderDate;
         this._attention = attention;
+        this._userId = userId;
+        this._total = total;
     }
 
     get orderID() {
@@ -24,5 +26,19 @@ export class Order {
     }
     set attention(attention) {
         this._attention = attention;
+    }
+
+    get userId() {
+        return this._userId;
+    }
+    set userId(userId) {
+        this._userId = userId;
+    }
+
+    get total() {
+        return this._total;
+    }
+    set total(total) {
+        this._total = total;
     }
 }

@@ -24,11 +24,20 @@
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
 </head>
+<style>
+	ul {
+		list-style-type: none;
+	}
+
+	.hide {
+		display: none;
+	}
+</style>
 
 <body class="author-template">
 	<div class="site-wrapper">
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<a class="navbar-brand" href="/PID_Assignment/views/pageFront/index_.html">
+			<a class="navbar-brand" href="/PID_Assignment/views/pageBack/commodityList.html">
 				<img src="/PID_Assignment/views/img/logo.png" alt="Fashion Critiques" />
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -38,106 +47,56 @@
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/index_.html">首頁<span
+						<a class="nav-link" href="/PID_Assignment/views/pageBack/commodityList.html">首頁<span
 								class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/index_.html">商品列表</a>
+						<a class="nav-link" href="/PID_Assignment/views/pageBack/commodityList.html">商品管理</a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/order.html">訂單</a>
+						<a class="nav-link" href="/PID_Assignment/views/pageBack/memberList.html">會員管理</a>
 					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
-					</li>
-
 				</ul>
 				<span class="socialheader row">
-					<div class="col" id="userName">userName</div>
-					<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
+					<div class="col" id="empID">empID</div>
+					<a class="col" href="/PID_Assignment/views/pageBack/login.html">登入</a>
 				</span>
 			</div>
 		</nav>
 		<br><br><br><br><br><br>
 
-		<div class="list">
+		<ul class="list" id="list">
 
-			<div class="row">
+			<li class="row">
 				<div class="col-3"><strong>會員圖片</strong></div>
 				<div class="col-2"><strong>帳號</strong></div>
 				<div class="col-2"><strong>電話</strong></div>
 				<div class="col-2"><strong>名稱</strong></div>
 				<div class="col-2"><strong>狀態</strong></div>
 				<div class="col-1"><strong>訂單</strong></div>
-			</div>
+			</li>
 			<!-- 一會員 -->
-			<div>
-
-				<div class="row">
-					<div class="col-3">
-						<img src="/PID_Assignment/views/img/gravatar.jpg"><br>
-					</div>
-					<div class="col-2">帳號</div>
-					<div class="col-2">電話</div>
-					<div class="col-2">名稱</div>
-					<div class="col-2">
-						<select id="select" name="select" class="custom-select">
-							<option value="open">啟用</option>
-							<option value="close">停用</option>
-						</select>
-					</div>
-					<div class="col-1">
-						<button type="button" name="" id="">過往訂單</button>
-					</div>
+			<li class="row">
+				<div class="col-3">
+					<img src="/PID_Assignment/views/img/gravatar.jpg"><br>
 				</div>
-				<!-- 生成過往訂單 -->
-				<div class="row">
-					<div class="col-1"></div>
-					<div class="col-11">
-						<div>
-							<div class="row">
-								<div class="col-4"><strong>訂單編號</strong></div>
-								<div class="col-4"><strong>日期</strong></div>
-								<div class="col-4"><strong>總價</strong></div>
-							</div>
-							<a href="">
-								<div class="row">
-									<div class="col-4">訂單編號</div>
-									<div class="col-4">日期</div>
-									<div class="col-4 total">總價</div>
-								</div>
-							</a>
-						</div>
-
-						<!-- 預計生成明細用 -->
-						<div class="row">
-							<div class="col-1"></div>
-							<div class="col-11">
-								<div>
-									<div class="row">
-										<div class="col-3"><strong>商品圖片</strong></div>
-										<div class="col-3"><strong>名稱</strong></div>
-										<div class="col-3"><strong>單價</strong></div>
-										<div class="col-2"><strong>數量</strong></div>
-										<div class="col-1"></div>
-									</div>
-									<div class="row">
-										<div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
-										<div class="col-3">名稱</div>
-										<div class="col-3">單價</div>
-										<div class="col-2">數量</div>
-										<div class="col-1"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
+				<div class="col-2">帳號</div>
+				<div class="col-2">電話</div>
+				<div class="col-2">名稱</div>
+				<div class="col-2">
+					<select id="select" name="select" class="custom-select">
+						<option value="open">啟用</option>
+						<option value="close">停用</option>
+					</select>
 				</div>
+				<div class="col-1">
+					<button type="button" name="" id="">過往訂單</button>
+				</div>
+			</li><br>
 
-			</div><br>
 
-		</div>
+
+		</ul>
 
 
 	</div>
@@ -154,7 +113,123 @@
 
 </body>
 <script type="module">
+	import { Member } from "../js/models/member.js";
+	import { Order } from "../js/models/order.js";
+	import { OrderDetail } from "../js/models/orderDetail.js";
 
+	import { MemberViewModel } from "../js/viewModels/memberViewModel.js";
+	import { OrderViewModel } from "../js/viewModels/orderViewModel.js";
+
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+	var members = [
+		new Member("aa", "aa1", "ll@gmail.com", "0911345678", true),
+		new Member("bb", "bb1", "bb@gmail.com", "0912345678", true),
+		new Member("cc", "cc1", "cc@gmail.com", "0913345678", false),
+		new Member("dd", "dd1", "dd@gmail.com", "0914345678", true),
+		new Member("ee", "ee1", "ee@gmail.com", "0915345678", false),
+		new Member("ff", "ff1", "ff@gmail.com", "0916345678", true)
+	];
+	var orders = [
+		new Order(0, "2020-01-01", false, "aa", 460),
+		new Order(1, "2020-01-01", false, "aa", 280),
+		new Order(2, "2020-01-01", false, "bb", 500)
+	];
+	var orderDetails = [
+		new OrderDetail(0, "11", 90, 3),
+		new OrderDetail(0, "12", 30, 4),
+		new OrderDetail(0, "13", 70, 1),
+		new OrderDetail(1, "11", 90, 2),
+		new OrderDetail(1, "14", 30, 1),
+		new OrderDetail(1, "15", 70, 1),
+		new OrderDetail(2, "12", 90, 3),
+		new OrderDetail(2, "13", 30, 3),
+		new OrderDetail(2, "14", 70, 2)
+	];
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+	//更新畫面
+	function updateMenu() {
+		$("#list").empty();
+		$("#list").append(`
+			<li class="row">
+				<div class="col-3"><strong>會員圖片</strong></div>
+				<div class="col-2"><strong>帳號</strong></div>
+				<div class="col-2"><strong>電話</strong></div>
+				<div class="col-2"><strong>名稱</strong></div>
+				<div class="col-2"><strong>狀態</strong></div>
+				<div class="col-1"><strong>訂單</strong></div>
+			</li>
+		`);
+
+		members.forEach(item => {
+			$("#list").append(
+				MemberViewModel.getManagerView(item.userID, item.userPhone, item.userName, item.userStatus)
+			);
+
+			$(`#btnShowOrder${item.userID}`).click(() => {
+				if ($(`#orders${item.userID}`).html().trim().length <= 0) {
+					showOrder(item.userID);
+				} else {
+					$(`#orders${item.userID}`).empty();
+				}
+
+			});
+
+		});
+	}
+	function showOrder(userID) {
+		$(`#orders${userID}`).empty();
+		$(`#orders${userID}`).html(`
+			<li class="row">
+				<div class="col-4"><strong>訂單編號</strong></div>
+				<div class="col-4"><strong>日期</strong></div>
+				<div class="col-2"><strong>總價</strong></div>
+				<div class="col-2"></div>
+			</li>
+		`);
+		orders.forEach(element => {
+			if (element.userId != userID) {
+				return;
+			}
+			$(`#orders${userID}`).append(
+				OrderViewModel.getOrderView(element.orderID, element.orderDate, element.total)
+			);
+
+			$(`#aOrder${element.orderID}`).click(function () {
+				element.attention = !element.attention;
+				orderDetailLayout(element);
+			});
+		});
+	}
+
+	//訂單明細生成
+	function orderDetailLayout(order) {
+		let id = order.orderID;
+		if (!order.attention) {
+			$(`#orderDetails${id}`).empty();
+			return;
+		}
+		$(`#orderDetails${id}`).html(`
+				<li class="row">
+					<div class="col-3">訂單明細</div>
+					<div class="col-3">商品名稱</div>
+					<div class="col-3">購買價格</div>
+					<div class="col-3">購買數量</div>
+				</li><br>
+			`);
+		//此預計在另外做伺服請求
+		for (let item of orderDetails) {
+			if (item.orderID != id) {
+				continue;
+			}
+			$(`#orderDetails${id}`)
+				.append(OrderViewModel.getDetailsView(item.commodityNane,
+					item.orderCommodityPrice, item.orderCommodityQuantity));
+		}
+	}
+	$(window).ready(() => {
+		updateMenu();
+	});
 </script>
 
 </html>

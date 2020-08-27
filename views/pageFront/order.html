@@ -127,7 +127,6 @@
 	];
 
 	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-	// (orderID, commodityNane, orderCommodityPrice, orderCommodityQuantity)
 	function orderTotal(id) {
 		let total = 0;
 		for (let item of orderDetails) {
@@ -171,16 +170,17 @@
 
 			$("#orders").append(OrderViewModel.getOrderView(item.orderID, item.orderDate, orderTotal(item.orderID)));
 
+			$(`#aOrder${item.orderID}`).click(function () {
+				item.attention = !item.attention;
+				orderDetailLayout(item);
+			});
+
 			if (item.attention) {
 				orderDetailLayout(item);
 			}
 		});
 
-		$(".order").click(function () {
-			let order = orders[$(this).closest("li").index()];
-			order.attention = !order.attention;
-			orderDetailLayout(order);
-		});
+
 	});
 
 
