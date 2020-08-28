@@ -7,7 +7,7 @@ class Member
     private $_userEmail;
     private $_userPhone;
 
-    public function Member($userID, $userName, $userEmail, $userPhone, $userPassword=0)
+    public function __construct($userID, $userName, $userEmail, $userPhone, $userPassword = 0)
     {
         $this->setUserID($userID);
         $this->setUserPassword($userPassword);
