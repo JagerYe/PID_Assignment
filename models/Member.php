@@ -7,12 +7,13 @@ class Member
     private $_userEmail;
     private $_userPhone;
 
-    public function Member($userID="",$userPassword="",$userName="",$userEmail="",$userPhone=""){
-        $this->_userID=$userID;
-        $this->_userPassword=$userPassword;
-        $this->_userName=$userName;
-        $this->_userEmail=$userEmail;
-        $this->_userPhone=$userPhone;
+    public function Member($userID, $userName, $userEmail, $userPhone, $userPassword=0)
+    {
+        $this->setUserID($userID);
+        $this->setUserPassword($userPassword);
+        $this->setUserName($userName);
+        $this->setUserEmail($userEmail);
+        $this->setUserPhone($userPhone);
     }
 
     public function getUserID()
@@ -22,7 +23,7 @@ class Member
     public function setUserID($userID)
     {
         if ($userID == null || $userID == "") {
-            return false;
+            throw new Exception("ID格式錯誤");
         }
         $this->_userID = $userID;
         return true;
@@ -34,9 +35,6 @@ class Member
     }
     public function setUserPassword($userPassword)
     {
-        if ($userPassword == null || $userPassword == "") {
-            return false;
-        }
         $this->_userPassword = $userPassword;
         return true;
     }
@@ -48,7 +46,7 @@ class Member
     public function setUserName($userName)
     {
         if ($userName == null || $userName == "") {
-            return false;
+            throw new Exception("名字格式錯誤");
         }
         $this->_userName = $userName;
         return true;
@@ -61,7 +59,7 @@ class Member
     public function setUserEmail($userEmail)
     {
         if ($userEmail == null || $userEmail == "") {
-            return false;
+            throw new Exception("email格式錯誤");
         }
         $this->_userEmail = $userEmail;
         return true;
@@ -74,9 +72,19 @@ class Member
     public function setUserPhone($userPhone)
     {
         if ($userPhone == null || $userPhone == "") {
-            return false;
+            throw new Exception("ID錯誤");
         }
         $this->_userPhone = $userPhone;
         return true;
+    }
+
+    public function showData()
+    {
+        echo ("<br>");
+        echo ("ID:" . $this->getUserID());
+        echo ("Password:" . $this->getUserPassword());
+        echo ("Name:" . $this->getUserName());
+        echo ("Email:" . $this->getUserEmail());
+        echo ("Phone:" . $this->getUserPhone());
     }
 }
