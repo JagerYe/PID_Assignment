@@ -1,4 +1,12 @@
 <?php
+
+use function PHPSTORM_META\type;
+
+echo(gettype("01")."<br>");
+echo(gettype(1)."<br>");
+echo(is_string("01")."<br>");
+echo(is_numeric(1)."<br>");
+echo(is_numeric("1")."<br>");
 // echo(__DIR__);
 // var_dump($_SERVER);
 // echo ($_SERVER["DOCUMENT_ROOT"]);
@@ -8,9 +16,9 @@ require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/member/MemberSer
 
 // $member01 = new Member();
 // var_dump($member01);
-$member02 = new Member("b01", "123456", "啾啾丸", "JoJoPlay@gmail.com", "0911213456");
-echo ($member02->getUserID() . "<br>");
-$memberDAO = (new MemberService())->getDAO();
+// $member02 = new Member("b01", "123456", "啾啾丸", "JoJoPlay@gmail.com", "0911213456");
+// echo ($member02->getUserID() . "<br>");
+// $memberDAO = (new MemberService())->getDAO();
 
 //新增測試----------------------------------------
 // $memberDAO->insertMember(
@@ -40,8 +48,8 @@ $memberDAO = (new MemberService())->getDAO();
 //刪除測試----------------------------------------
 
 //取得所有測試----------------------------------------
-$members = $memberDAO->getAllMember();
-var_dump($members);
+// $members = $memberDAO->getAllMember();
+// var_dump($members);
 
 //此方法會讓$item得不到member的class
 // foreach ($members as $item) {
@@ -49,10 +57,10 @@ var_dump($members);
 //     $item->showDate();
 // }
 
-for ($i = 0; $i < count($members); $i++) {
-    $members[$i]->showData();
-    var_dump($members[$i]);
-}
+// for ($i = 0; $i < count($members); $i++) {
+//     $members[$i]->showData();
+//     var_dump($members[$i]);
+// }
 //取得所有測試----------------------------------------
 
 //取得指定會員測試----------------------------------------
@@ -61,8 +69,17 @@ for ($i = 0; $i < count($members); $i++) {
 //取得指定會員測試----------------------------------------
 
 //登入----------------------------------------
-// echo ($memberDAO->doLogin("a01", "123"));
-// if ($memberDAO->doLogin("a01", "123")<=0) {
+// $request = $memberDAO->doLogin("a01", "123");
+// echo ($request);
+// if ($request == 1) {
+//     echo ("ok");
+// } else {
+//     echo ("no");
+// }
+// echo("<hr>");
+// $request = $memberDAO->doLogin("a01", "123456");
+// echo ($request);
+// if ($request == 1) {
 //     echo ("ok");
 // } else {
 //     echo ("no");

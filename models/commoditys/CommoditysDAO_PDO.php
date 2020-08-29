@@ -1,19 +1,19 @@
 <?php
-require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/employees/EmployeesDAO_Interface.php";
+require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commoditys/CommoditysDAO_Interface.php";
 require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/config.php";
-class EmployeesDAO_PDO implements EmployeesDAO
+class CommoditysDAO_PDO implements CommoditysDAO
 {
 
-    private $_strInsert = "INSERT INTO `Employees`(`empID`, `empPassword`) VALUES (:empID,:empPassword);";
-    private $_strUpdate = "UPDATE `Employees` SET `empID`=:empID,`empPassword`=:empPassword WHERE `empID` =:empID;";
-    private $_strDelete = "DELETE FROM `Employees` WHERE `empID`=:empID;";
-    private $_strCheckEmployeesExist = "SELECT COUNT(*) FROM `Employees` WHERE `empID`=:empID";
-    private $_strGetAll = "SELECT `empID` FROM `Employees`;";
-    private $_strGetOne = "SELECT `empID` FROM `Employees` WHERE `empID`=:empID;";
-    private $_strDoLogin = "SELECT COUNT(*) FROM `Employees` WHERE `empID`=:empID AND `empPassword`=:empPassword";
+    private $_strInsert = "INSERT INTO `Commoditys`(`empID`, `empPassword`) VALUES (:empID,:empPassword);";
+    private $_strUpdate = "UPDATE `Commoditys` SET `empID`=:empID,`empPassword`=:empPassword WHERE `empID` =:empID;";
+    private $_strDelete = "DELETE FROM `Commoditys` WHERE `empID`=:empID;";
+    private $_strCheckCommoditysExist = "SELECT COUNT(*) FROM `Commoditys` WHERE `empID`=:empID";
+    private $_strGetAll = "SELECT `empID` FROM `Commoditys`;";
+    private $_strGetOne = "SELECT `empID` FROM `Commoditys` WHERE `empID`=:empID;";
+    private $_strDoLogin = "SELECT COUNT(*) FROM `Commoditys` WHERE `empID`=:empID AND `empPassword`=:empPassword";
 
     //新增會員
-    public function insertEmployees($id, $password)
+    public function insertCommoditys($id, $password)
     {
         echo (gettype($id));
         try {
@@ -33,20 +33,20 @@ class EmployeesDAO_PDO implements EmployeesDAO
         return true;
     }
     //新增會員 用物件
-    public function insertEmployeesByObj($employees)
+    public function insertCommoditysByObj($commoditys)
     {
-        return $this->insertEmployees($employees->getEmpID(), $employees->getempPassword());
+        return $this->insertCommoditys($commoditys->getEmpID(), $commoditys->getempPassword());
     }
 
     //更新會員
-    public function updateEmployees($employees)
+    public function updateCommoditys($commoditys)
     {
         try {
             $dbh = (new Config)->getDBConnect();
             $dbh->beginTransaction();
             $sth = $dbh->prepare($this->_strUpdate);
-            $sth->bindParam("empID", $employees->getEmpID());
-            $sth->bindParam("empPassword", $employees->getEmpPassword());
+            $sth->bindParam("empID", $commoditys->getEmpID());
+            $sth->bindParam("empPassword", $commoditys->getEmpPassword());
             $sth->execute();
             $dbh->commit();
             $sth = null;
@@ -59,12 +59,12 @@ class EmployeesDAO_PDO implements EmployeesDAO
     }
 
     //之後需增加檢查是否有訂單
-    public function deleteEmployeesByID($id)
+    public function deleteCommoditysByID($id)
     {
         try {
             $dbh = (new Config)->getDBConnect();
             $dbh->beginTransaction();
-            $sth = $dbh->prepare($this->_strCheckEmployeesExist);
+            $sth = $dbh->prepare($this->_strCheckCommoditysExist);
             $sth->bindParam("empID", $id);
             $sth->execute();
             if (!$sth->fetch()) {
@@ -83,14 +83,14 @@ class EmployeesDAO_PDO implements EmployeesDAO
         return true;
     }
 
-    public function getAllEmployees()
+    public function getAllCommoditys()
     {
         try {
             $dbh = (new Config)->getDBConnect();
             $sth = $dbh->query($this->_strGetAll);
             $request = $sth->fetchAll();
             foreach ($request as $item) {
-                $employeess[] = new Employees($item['empID']);
+                $commodityss[] = new Commoditys($item['empID']);
             }
             $sth = null;
         } catch (PDOException $err) {
@@ -99,9 +99,9 @@ class EmployeesDAO_PDO implements EmployeesDAO
             return false;
         }
         $dbh = null;
-        return $employeess;
+        return $commodityss;
     }
-    public function getOneEmployeesByID($id)
+    public function getOneCommoditysByID($id)
     {
         try {
             $dbh = (new Config)->getDBConnect();
@@ -111,7 +111,7 @@ class EmployeesDAO_PDO implements EmployeesDAO
             $request = $sth->fetch();
             echo ($request);
 
-            $employees = new Employees($request['empID']);
+            $commoditys = new Commoditys($request['empID']);
 
             $sth = null;
         } catch (PDOException $err) {
@@ -119,7 +119,7 @@ class EmployeesDAO_PDO implements EmployeesDAO
             return false;
         }
         $dbh = null;
-        return $employees;
+        return $commoditys;
     }
 
     public function doLogin($id, $password)

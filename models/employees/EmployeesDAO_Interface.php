@@ -1,8 +1,8 @@
 <?php
 interface EmployeesDAO
 {
-    public function insertEmployees($id,$password,$name,$email,$phone);
-    public function updateEmployees($member);
+    public function insertEmployees($id,$password);
+    public function updateEmployees($employees);
     public function deleteEmployeesByID($id);
     public function getOneEmployeesByID($id);
     public function getAllEmployees();

@@ -7,10 +7,10 @@ class MemberDAO_PDO implements MemberDAO
     private $_strInsert = "INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`) VALUES (:userID,:userPassword,:userName,:userEmail,:userPhone);";
     private $_strUpdate = "UPDATE `Members` SET `userID`=:userID,`userPassword`=:userPassword,`userName`=:userName,`userEmail`=:userEmail,`userPhone`=:userPhone WHERE `userID`=:userID;";
     private $_strDelete = "DELETE FROM `Members` WHERE `userID` = :userID;";
-    private $_strCheckMemberExist = "SELECT `userID` FROM `Members` WHERE `userID` = :userID;";
+    private $_strCheckMemberExist = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID;";
     private $_strGetAll = "SELECT `userID`, `userName`, `userEmail`, `userPhone` FROM `Members`;";
     private $_strGetOne = "SELECT `userID`, `userName`, `userEmail`, `userPhone` FROM `Members` WHERE `userID` = :userID;";
-    private $_strDoLogin = "SELECT `userID` FROM `Members` WHERE `userID` = :userID AND `userPassword` = :userPassword;";
+    private $_strDoLogin = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID AND `userPassword` = :userPassword;";
 
     //新增會員
     public function insertMember($id, $password, $name, $email, $phone)
@@ -72,7 +72,8 @@ class MemberDAO_PDO implements MemberDAO
             $sth = $dbh->prepare($this->_strCheckMemberExist);
             $sth->bindParam("userID", $id);
             $sth->execute();
-            if ($sth->fetch()) {
+            $request = $sth->fetch();
+            if ($request['0'] != 1) {
                 throw new Exception("找不到");
             }
             $sth = $dbh->prepare($this->_strDelete);
