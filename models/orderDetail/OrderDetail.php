@@ -24,9 +24,6 @@ class OrderDetail
     }
     public function setOrderID($orderID)
     {
-        if ($orderID == null || $orderID == "") {
-            throw new Exception("訂單ID格式錯誤");
-        }
         $this->_orderID = $orderID;
         return true;
     }

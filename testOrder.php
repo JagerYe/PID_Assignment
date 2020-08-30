@@ -12,7 +12,7 @@ $orderDAO->insertBlankOrder(
     $order01->getUserID(),
     $order01->getOrderDate()
 );
-$orderDAO->insertOrderByObj($order02);
+$orderDAO->insertBlankOrderByObj($order02);
 echo ("<hr>");
 //新增測試----------------------------------------
 

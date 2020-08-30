@@ -5,6 +5,7 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
 {
 
     private $_strInsert = "INSERT INTO `orderdetails`(`orderID`, `commodityID`, `orderCommodityPrice`, `orderCommodityQuantity`) VALUES (:orderID,:commodityID,:orderCommodityPrice,:orderCommodityQuantity);";
+    private $_strInsertManyBase = "INSERT INTO `orderdetails`(`orderID`, `commodityID`, `orderCommodityPrice`, `orderCommodityQuantity`) VALUES";
     private $_strUpdate = "UPDATE `orderdetails` SET `orderID`=:orderID,`commodityID`=:commodityID,`orderCommodityPrice`=:orderCommodityPrice,`orderCommodityQuantity`=:orderCommodityQuantity WHERE `orderID`=:oldOrderID and `commodityID`=:oldCommodityID;";
     private $_strDelete = "DELETE FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
     private $_strCheckOrderDetailExist = "SELECT COUNT(*) FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
@@ -33,7 +34,7 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
         return true;
     }
 
-    //新增會員 用物件
+    //新增 用物件
     public function insertOrderDetailByObj($orderDetail)
     {
         return $this->insertOrderDetail(
@@ -42,6 +43,31 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
             $orderDetail->getOrderCommodityPrice(),
             $orderDetail->getOrderCommodityQuantity()
         );
+    }
+
+    //新增多數清單
+    public function insertManyOrderDetailByObjects($orderDetails, $orderID, $dbh)
+    {
+        for ($i = 0; $i < count($orderDetails); $i++) {
+            $this->_strInsertManyBase .= "(:orderID{$i},:commodityID{$i},:orderCommodityPrice{$i},:orderCommodityQuantity{$i})";
+            if ($i < (count($orderDetails) - 1)) {
+                $this->_strInsertManyBase .= ",";
+            }
+        }
+        try {
+            $sth = $dbh->prepare($this->_strInsertManyBase);
+            foreach ($orderDetails as $key => $item) {
+                $sth->bindParam("orderID$key", $orderID);
+                $sth->bindParam("commodityID$key", $item->getCommodityID());
+                $sth->bindParam("orderCommodityPrice$key", $item->getOrderCommodityPrice());
+                $sth->bindParam("orderCommodityQuantity$key", $item->getOrderCommodityQuantity());
+            }
+            $sth->execute();
+            $sth = null;
+        } catch (PDOException $err) {
+            throw new Exception("找不到");
+        }
+        return true;
     }
 
     //更新
@@ -68,7 +94,6 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
         return true;
     }
 
-    //之後需增加檢查是否有訂單
     public function deleteOrderDetailByID($orderID, $commodityID)
     {
         try {
@@ -119,6 +144,7 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
         $dbh = null;
         return $orderDetails;
     }
+
     public function getOneOrderDetailByID($orderID, $commodityID)
     {
         try {

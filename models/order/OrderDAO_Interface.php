@@ -1,7 +1,7 @@
 <?php
 interface OrderDAO
 {
-    public function insertOrder($userID, $orderDate);
+    public function insertOrder($userID, $orderDate, $orderDetails);
     public function insertBlankOrder($userID, $orderDate);
     public function updateOrder($order);
     public function deleteOrderByID($id);

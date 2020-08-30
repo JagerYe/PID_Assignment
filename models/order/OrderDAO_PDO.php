@@ -1,5 +1,6 @@
 <?php
 require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/order/OrderDAO_Interface.php";
+require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/orderDetail/OrderDetailService.php";
 require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/config.php";
 class OrderDAO_PDO implements OrderDAO
 {
@@ -12,7 +13,7 @@ class OrderDAO_PDO implements OrderDAO
     private $_strGetOne = "SELECT * FROM `orders` WHERE `orderID`=:orderID;";
 
     //新增
-    public function insertOrder($userID, $orderDate)
+    public function insertOrder($userID, $orderDate, $orderDetails)
     {
         try {
             $dbh = (new Config)->getDBConnect();
@@ -21,14 +22,19 @@ class OrderDAO_PDO implements OrderDAO
             $sth->bindParam("userID", $userID);
             $sth->bindParam("orderDate", $orderDate);
             $sth->execute();
+            $id = $dbh->lastInsertId();
+            if (!(((new OrderDetailService())->getDAO())->insertManyOrderDetailByObjects($orderDetails, $id, $dbh))) {
+                throw new Exception("找不到");
+            }
             $dbh->commit();
             $sth = null;
-        } catch (PDOException $err) {
+        } catch (Exception $err) {
             $dbh->rollBack();
+            $dbh = null;
             return false;
         }
         $dbh = null;
-        return true;
+        return $id;
     }
 
     public function insertBlankOrder($userID, $orderDate)
@@ -41,7 +47,7 @@ class OrderDAO_PDO implements OrderDAO
             $sth->bindParam("orderDate", $orderDate);
             $sth->execute();
             $dbh->commit();
-            $id=$dbh->lastInsertId();
+            $id = $dbh->lastInsertId();
             $sth = null;
         } catch (PDOException $err) {
             $dbh->rollBack();
@@ -52,11 +58,12 @@ class OrderDAO_PDO implements OrderDAO
     }
 
     //新增 用物件
-    public function insertOrderByObj($order)
+    public function insertOrderByObj($order, $orderDetails)
     {
         return $this->insertOrder(
             $order->getUserID(),
-            $order->getOrderDate()
+            $order->getOrderDate(),
+            $orderDetails
         );
     }
 
@@ -79,7 +86,7 @@ class OrderDAO_PDO implements OrderDAO
             $sth->bindParam("userID", $order->getUserID());
             $sth->bindParam("orderDate", $order->getOrderDate());
             $sth->execute();
-            $id=$dbh->lastInsertId();
+            $id = $dbh->lastInsertId();
             $dbh->commit();
             $sth = null;
         } catch (PDOException $err) {
@@ -160,5 +167,4 @@ class OrderDAO_PDO implements OrderDAO
         $dbh = null;
         return $order;
     }
-
 }
