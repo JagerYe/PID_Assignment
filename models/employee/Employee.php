@@ -1,5 +1,5 @@
 <?php
-class Employees
+class Employee
 {
     private $_empID;
     private $_empPassword;

@@ -1,5 +1,5 @@
 <?php
-class Commoditys
+class Commodity
 {
     private $_commodityID;
     private $_commodityName;
@@ -9,8 +9,15 @@ class Commoditys
     private $_commodityText;
     private $_commodityImage;
 
-    public function __construct($commodityID, $commodityName, $commodityPrice, $commodityQuantity, $commodityStatus, $commodityText = "", $commodityImage = null)
-    {
+    public function __construct(
+        $commodityID,
+        $commodityName,
+        $commodityPrice,
+        $commodityQuantity,
+        $commodityStatus,
+        $commodityText = "",
+        $commodityImage = null
+    ) {
         $this->setCommodityID($commodityID);
         $this->setCommodityName($commodityName);
         $this->setCommodityPrice($commodityPrice);
@@ -52,7 +59,7 @@ class Commoditys
     }
     public function setCommodityPrice($commodityPrice)
     {
-        if ($commodityPrice == null || !is_numeric($commodityPrice) || $commodityPrice <= 0) {
+        if ($commodityPrice == null || !is_numeric($commodityPrice) || $commodityPrice < 0) {
             throw new Exception("價格格式錯誤");
         }
         $this->_commodityPrice = $commodityPrice;
@@ -65,7 +72,7 @@ class Commoditys
     }
     public function setCommodityQuantity($commodityQuantity)
     {
-        if ($commodityQuantity == null || !is_numeric($commodityQuantity) || $commodityQuantity <= 0) {
+        if ($commodityQuantity == null || !is_numeric($commodityQuantity) || $commodityQuantity < 0) {
             throw new Exception("數量格式錯誤");
         }
         $this->_commodityQuantity = $commodityQuantity;
