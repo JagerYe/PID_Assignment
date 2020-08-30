@@ -7,7 +7,7 @@ class OrderDAO_PDO implements OrderDAO
     private $_strInsert = "INSERT INTO `orders`(`userID`, `orderDate`) VALUES (:userID,:orderDate);";
     private $_strUpdate = "UPDATE `orders` SET `userID`=:userID,`orderDate`=:orderDate WHERE `orderID`=:orderID;";
     private $_strDelete = "DELETE FROM `orders` WHERE `orderID`=:orderID;";
-    private $_strCheckCommodityExist = "SELECT COUNT(*) FROM `orders` WHERE `orderID`=:orderID;";
+    private $_strCheckOrderExist = "SELECT COUNT(*) FROM `orders` WHERE `orderID`=:orderID;";
     private $_strGetAll = "SELECT * FROM `orders`;";
     private $_strGetOne = "SELECT * FROM `orders` WHERE `orderID`=:orderID;";
 
@@ -96,7 +96,7 @@ class OrderDAO_PDO implements OrderDAO
         try {
             $dbh = (new Config)->getDBConnect();
             $dbh->beginTransaction();
-            $sth = $dbh->prepare($this->_strCheckCommodityExist);
+            $sth = $dbh->prepare($this->_strCheckOrderExist);
             $sth->bindParam("orderID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_NUM);
