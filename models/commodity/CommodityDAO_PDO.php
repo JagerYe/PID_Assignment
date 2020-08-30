@@ -6,7 +6,7 @@ class CommodityDAO_PDO implements CommodityDAO
 
     private $_strInsert = "INSERT INTO `commoditys`(`commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText`) VALUES (:commodityName,:commodityPrice,:commodityQuantity,:commodityStatus,:commodityText);";
     private $_strUpdate = "UPDATE `commoditys` SET `commodityName`=:commodityName,`commodityPrice`=:commodityPrice,`commodityQuantity`=:commodityQuantity,`commodityStatus`=:commodityStatus,`commodityText`=:commodityText WHERE `commodityID`=:commodityID;";
-    
+    private $_strDelete = "DELETE FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strCheckCommodityExist = "SELECT COUNT(*) FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strGetAll = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys`;";
     private $_strGetOne = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys` WHERE `commodityID`=:commodityID;";
@@ -73,7 +73,6 @@ class CommodityDAO_PDO implements CommodityDAO
         return true;
     }
 
-    private $_strDelete = "DELETE FROM `commoditys` WHERE `commodityID`=:commodityID;";
     //之後需增加檢查是否有訂單
     public function deleteCommodityByID($id)
     {

@@ -1,7 +1,7 @@
 <?php
 
 require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commodity/CommodityDAO_PDO.php";
-class CommoditysService
+class CommodityService
 {
     private $_dao;
     function __construct()

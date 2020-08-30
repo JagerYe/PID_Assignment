@@ -5,7 +5,7 @@ require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commodity/Commod
 
 $commoditys01 = new Commodity("??", "111", 111, 222, "close", "333");
 $commoditys02 = new Commodity("??", "111", 111, 222, "close", "333");
-$commoditysDAO = (new CommoditysService())->getDAO();
+$commoditysDAO = (new CommodityService())->getDAO();
 
 //新增測試----------------------------------------
 $commoditysDAO->insertCommodity(
