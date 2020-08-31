@@ -9,7 +9,7 @@ class OrderDAO_PDO implements OrderDAO
     private $_strUpdate = "UPDATE `orders` SET `userID`=:userID,`orderDate`=:orderDate WHERE `orderID`=:orderID;";
     private $_strDelete = "DELETE FROM `orders` WHERE `orderID`=:orderID;";
     private $_strCheckOrderExist = "SELECT COUNT(*) FROM `orders` WHERE `orderID`=:orderID;";
-    private $_strGetAll = "SELECT * FROM `orders`;";
+    private $_strGetAll = "SELECT `orderID`, `userID`, `orderDate`, ( SELECT SUM( `orderCommodityPrice` * `orderCommodityQuantity`) FROM `orderDetails` AS od WHERE od.`orderID` = o.`orderID`) AS total FROM `orders` AS o;";
     private $_strGetOne = "SELECT * FROM `orders` WHERE `orderID`=:orderID;";
 
     //新增
@@ -133,7 +133,8 @@ class OrderDAO_PDO implements OrderDAO
                 $orders[] = new Order(
                     $item['orderID'],
                     $item['userID'],
-                    $item['orderDate']
+                    $item['orderDate'],
+                    $item['total']
                 );
             }
             $sth = null;
@@ -157,7 +158,8 @@ class OrderDAO_PDO implements OrderDAO
             $order = new Order(
                 $request['orderID'],
                 $request['userID'],
-                $request['orderDate']
+                $request['orderDate'],
+                $request['total']
             );
 
             $sth = null;

@@ -3,6 +3,7 @@ class OrderDetail implements \JsonSerializable
 {
     private $_orderID;
     private $_commodityID;
+    private $_commodityName;
     private $_orderCommodityPrice;
     private $_orderCommodityQuantity;
 
@@ -10,12 +11,14 @@ class OrderDetail implements \JsonSerializable
         $orderID,
         $commodityID,
         $orderCommodityPrice,
-        $orderCommodityQuantity
+        $orderCommodityQuantity,
+        $commodityName = ""
     ) {
         $this->setOrderID($orderID);
         $this->setCommodityID($commodityID);
         $this->setOrderCommodityPrice($orderCommodityPrice);
         $this->setOrderCommodityQuantity($orderCommodityQuantity);
+        $this->setCommodityName($commodityName);
     }
 
     public function getOrderID()
@@ -38,6 +41,16 @@ class OrderDetail implements \JsonSerializable
             throw new Exception("商品ID格式錯誤");
         }
         $this->_commodityID = $commodityID;
+        return true;
+    }
+
+    public function getCommodityName()
+    {
+        return $this->_commodityName;
+    }
+    public function setCommodityName($commodityName)
+    {
+        $this->_commodityName = $commodityName;
         return true;
     }
 

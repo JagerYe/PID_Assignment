@@ -5,26 +5,15 @@ class Order implements \JsonSerializable
     private $_userID;
     private $_orderDate;
     private $_attention;
+    private $_total;
 
-    public function __construct($orderID, $userID, $orderDate, $attention = false)
+    public function __construct($orderID, $userID, $orderDate, $total = 0, $attention = false)
     {
         $this->setOrderID($orderID);
         $this->setUserID($userID);
         $this->setOrderDate($orderDate);
         $this->setOrderAttention($attention);
-    }
-
-    public function getOrderAttention()
-    {
-        return $this->_attention;
-    }
-    public function setOrderAttention($attention)
-    {
-        if (!is_bool($attention)) {
-            throw new Exception("ID格式錯誤");
-        }
-        $this->_attention = $attention;
-        return true;
+        $this->setOrderTotal($total);
     }
 
     public function getOrderID()
@@ -65,6 +54,33 @@ class Order implements \JsonSerializable
         $this->_orderDate = $orderDate;
         return true;
     }
+
+    public function getOrderAttention()
+    {
+        return $this->_attention;
+    }
+    public function setOrderAttention($attention)
+    {
+        if (!is_bool($attention)) {
+            throw new Exception("ID格式錯誤");
+        }
+        $this->_attention = $attention;
+        return true;
+    }
+
+    public function getOrderTotal()
+    {
+        return $this->_total;
+    }
+    public function setOrderTotal($total)
+    {
+        if (!is_numeric($total)) {
+            throw new Exception("總額格式錯誤");
+        }
+        $this->_total = $total;
+        return true;
+    }
+
 
     public function jsonSerialize()
     {

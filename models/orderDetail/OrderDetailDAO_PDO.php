@@ -9,8 +9,8 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
     private $_strUpdate = "UPDATE `orderdetails` SET `orderID`=:orderID,`commodityID`=:commodityID,`orderCommodityPrice`=:orderCommodityPrice,`orderCommodityQuantity`=:orderCommodityQuantity WHERE `orderID`=:oldOrderID and `commodityID`=:oldCommodityID;";
     private $_strDelete = "DELETE FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
     private $_strCheckOrderDetailExist = "SELECT COUNT(*) FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
-    private $_strGetAll = "SELECT * FROM `orderdetails`;";
-    private $_strGetOne = "SELECT * FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
+    private $_strGetAll = "SELECT `orderID`, o.`commodityID`, `commodityName`, `orderCommodityPrice`, `orderCommodityQuantity` FROM `orderdetails` AS o INNER JOIN `commoditys` AS c ON o.`commodityID`=c.`commodityID`;";
+    private $_strGetOne = "SELECT `orderID`, o.`commodityID`, `commodityName`, `orderCommodityPrice`, `orderCommodityQuantity` FROM `orderdetails` AS o INNER JOIN `commoditys` AS c ON o.`commodityID`=c.`commodityID` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
 
     //新增
     public function insertOrderDetail($orderID, $commodityID, $price, $quantity)
@@ -132,7 +132,8 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
                     $item['orderID'],
                     $item['commodityID'],
                     $item['orderCommodityPrice'],
-                    $item['orderCommodityQuantity']
+                    $item['orderCommodityQuantity'],
+                    $item['commodityName']
                 );
             }
             $sth = null;
@@ -160,7 +161,8 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
                 $request['orderID'],
                 $request['commodityID'],
                 $request['orderCommodityPrice'],
-                $request['orderCommodityQuantity']
+                $request['orderCommodityQuantity'],
+                $request['commodityName']
             );
 
             $sth = null;

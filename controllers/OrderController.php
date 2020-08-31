@@ -5,7 +5,7 @@ class OrderController extends Controller
     public function __construct()
     {
         require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/order/OrderService.php";
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/controllers/OrderDetailsController.php";
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/controllers/OrderDetailController.php";
         $this->_dao = (new OrderService())->getDAO();
         $this->model("order");
     }
@@ -33,7 +33,7 @@ class OrderController extends Controller
         } catch (Exception $err) {
             return false;
         }
-        $orderDetails = (new OrderDetailsController())->jsonToModel($detailsStr);
+        $orderDetails = (new OrderDetailController())->jsonToModel($detailsStr);
 
         if ($id = $this->_dao->insertOrder($userID, $orderDate, $orderDetails)) {
             $order = $this->getOne($id, true);
@@ -45,7 +45,7 @@ class OrderController extends Controller
     public function insertByObj($orderStr, $detailsStr)
     {
 
-        $orderDetails = (new OrderDetailsController())->jsonToModel($detailsStr);
+        $orderDetails = (new OrderDetailController())->jsonToModel($detailsStr);
 
         if (!($order = $this->jsonToModel($orderStr))) {
             return false;

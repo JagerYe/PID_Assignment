@@ -49,7 +49,6 @@
 	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 
 	let members = new Array();
-	let orders = new Array();
 	let orderDetails = new Array();
 	//更新畫面
 	function updateMenu() {
@@ -94,19 +93,31 @@
 				<div class="col-2"></div>
 			</li>
 		`);
-		$.ajax;
-		orders.forEach(element => {
-			if (element.userId != userID) {
-				return;
-			}
-			$(`#orders${userID}`).append(
-				OrderViewModel.getOrderView(element.orderID, element.orderDate, element.total)
-			);
+		$.ajax({
+			type: "GET",
+			url: "/PID_Assignment/order/getAll"
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let order = new Order(
+					item['_orderID'],
+					item['_orderDate'],
+					item['_attention'],
+					item['_userID'],
+					item['_total']
+				);
+				if (order.userId != userID) {
+					continue;
+				}
+				$(`#orders${userID}`).append(
+					OrderViewModel.getOrderView(order.orderID, order.orderDate, order.total)
+				);
 
-			$(`#aOrder${element.orderID}`).click(function () {
-				element.attention = !element.attention;
-				orderDetailLayout(element);
-			});
+				$(`#aOrder${order.orderID}`).click(function () {
+					order.attention = !order.attention;
+					orderDetailLayout(order);
+				});
+			}
 		});
 	}
 
@@ -126,15 +137,31 @@
 				</li><br>
 			`);
 		//此預計在另外做伺服請求
-		for (let item of orderDetails) {
-			if (item.orderID != id) {
-				continue;
+		$.ajax({
+			type: "GET",
+			url: "/PID_Assignment/orderDetail/getAll"
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let orderDetail = new OrderDetail(
+					item['_orderID'],
+					item['_commodityName'],
+					item['_orderCommodityPrice'],
+					item['_orderCommodityQuantity']
+				);
+
+				if (orderDetail.orderID != id) {
+					continue;
+				}
+
+				$(`#orderDetails${id}`)
+					.append(OrderViewModel.getDetailsView(orderDetail.commodityNane,
+						orderDetail.orderCommodityPrice, orderDetail.orderCommodityQuantity));
 			}
-			$(`#orderDetails${id}`)
-				.append(OrderViewModel.getDetailsView(item.commodityNane,
-					item.orderCommodityPrice, item.orderCommodityQuantity));
-		}
+		});
+
 	}
+
 	$(window).ready(() => {
 		$.ajax({
 			type: "GET",

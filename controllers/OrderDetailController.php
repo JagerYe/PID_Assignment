@@ -1,5 +1,5 @@
 <?php
-class OrderDetailsController extends Controller
+class OrderDetailController extends Controller
 {
     private $_dao;
     public function __construct()
@@ -75,13 +75,13 @@ class OrderDetailsController extends Controller
     //     return false;
     // }
 
-    // public function getAll()
-    // {
-    //     if ($members = $this->_dao->getAllMember()) {
-    //         return json_encode($members);
-    //     }
-    //     return false;
-    // }
+    public function getAll()
+    {
+        if ($orderDetails = $this->_dao->getAllOrderDetails()) {
+            return json_encode($orderDetails);
+        }
+        return false;
+    }
 
     // public function getOne($id)
     // {
