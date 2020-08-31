@@ -23,45 +23,23 @@
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!------ Include the above in your HEAD tag ---------->
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 </head>
+<script>
+	//防止重新導入這，倒入這就直接回首頁
+	$.ajax({
+		type: "GET",
+		url: "/PID_Assignment/member/getSessionUserName"
+	}).then(function (e) {
+		if (e) {
+			window.location.href = "/PID_Assignment/views/pageFront/index_.html";
+		}
+	});
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<a class="navbar-brand" href="/PID_Assignment/views/pageFront/index_.html">
-				<img src="/PID_Assignment/views/img/logo.png" alt="Fashion Critiques" />
-			</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-				aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/index_.html">首頁<span
-								class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/index_.html">商品列表</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/order.html">訂單</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
-					</li>
-	
-				</ul>
-				<span class="socialheader row">
-					<div class="col" id="userName">userName</div>
-					<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
-				</span>
-			</div>
-		</nav>
-		<br><br><br><br>
-
 		<div class="container">
 
 			<div class="card bg-light">
@@ -73,45 +51,50 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-user"></i> </span>
 							</div>
-							<input id="userName" name="userName" class="form-control" placeholder="請輸入姓名" type="text">
+							<input id="userName" class="form-control" placeholder="請輸入姓名" type="text">
 						</div> <!-- form-group// -->
+
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
 							</div>
-							<input id="userEmail" name="userEmail" class="form-control" placeholder="請輸入Email"
-								type="email">
+							<input id="userEmail" class="form-control" placeholder="請輸入Email" type="email">
 						</div> <!-- form-group// -->
+
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-phone"></i> </span>
 							</div>
-							<input id="userPhone" name="userPhone" class="form-control" placeholder="請輸入手機號碼"
-								type="text">
+							<input id="userPhone" class="form-control" placeholder="請輸入手機號碼" type="text">
 						</div> <!-- form-group// -->
+
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-user"></i> </span>
 							</div>
-							<input id="userID" name="userID" class="form-control" placeholder="請輸入帳號" type="text">
+							<input id="userID" class="form-control" placeholder="請輸入帳號" type="text">
 						</div> <!-- form-group// -->
+
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
 							</div>
-							<input id="userPassword" name="userPassword" class="form-control" placeholder="請輸入密碼"
-								type="password">
+							<input id="userPassword" class="form-control" placeholder="請輸入密碼" type="password">
 						</div> <!-- form-group// -->
+
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
 							</div>
-							<input id="userPassword_" name="userPassword_" class="form-control" placeholder="請在輸入一次密碼"
-								type="password">
+							<input id="userPassword_" class="form-control" placeholder="請在輸入一次密碼" type="password">
 						</div> <!-- form-group// -->
+						<p class="form-group" id="passwordCheckMessage"></p>
+
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary btn-block"> Create Account </button>
+							<button type="button" id="btnSub" class="btn btn-primary btn-block"> Create Account
+							</button>
 						</div> <!-- form-group// -->
+
 						<p class="text-center">Have an account? <a href="/PID_Assignment/views/pageFront/login.html">Log
 								In</a> </p>
 					</form>
@@ -133,5 +116,64 @@
 	</div>
 
 </body>
+<script type="module">
+	import { Member } from "../js/models/member.js";
+
+	$(window).ready(() => {
+
+		$("#userPassword_").change(function (e) {
+			if ($("#userPassword").val() != $("#userPassword_").val()) {
+				$("#passwordCheckMessage").text("密碼不一致！");
+			} else {
+				$("#passwordCheckMessage").empty();
+			}
+		});
+
+		$("#btnSub").click(() => {
+			let member = new Member($("#userID").val(),
+				$("#userName").val(),
+				$("#userEmail").val(),
+				$("#userPhone").val(),
+				true,
+				$("#userPassword").val());
+			if ((member.userPassword != $("#userPassword_").val()) || member.userPassword.length <= 0) {
+				alert("密碼格式錯誤！");
+				return;
+			}
+			if (member.userName.length <= 0) {
+				alert("名字空白！");
+				return;
+			}
+			if (member.userEmail.length <= 0) {
+				alert("Email空白！");
+				return;
+			}
+			if (member.userPhone.length <= 0) {
+				alert("電話空白！");
+				return;
+			}
+			if (member.userID.length <= 0) {
+				alert("帳號空白！");
+				return;
+			}
+			let subData = {
+				member: JSON.stringify(member)
+			}
+			$.ajax({
+				type: "POST",
+				url: "/PID_Assignment/member/insertByObj",
+				data: subData
+			}).then(function (e) {
+				if (e) {
+					alert("註冊成功，請登入");
+					window.location.href = "/PID_Assignment/views/pageFront/login.html";
+				} else {
+					alert("註冊失敗");
+				}
+			});
+
+		});
+	});
+</script>
 
 </html>

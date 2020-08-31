@@ -1,19 +1,21 @@
 <?php
-class Member
+class Member implements \JsonSerializable
 {
     private $_userID;
     private $_userPassword;
     private $_userName;
     private $_userEmail;
     private $_userPhone;
+    private $_userStatus;
 
-    public function __construct($userID, $userName, $userEmail, $userPhone, $userPassword = 0)
+    public function __construct($userID, $userName, $userEmail, $userPhone,$userStatus, $userPassword = 0)
     {
         $this->setUserID($userID);
         $this->setUserPassword($userPassword);
         $this->setUserName($userName);
         $this->setUserEmail($userEmail);
         $this->setUserPhone($userPhone);
+        $this->setUserStatus($userStatus);
     }
 
     public function getUserID()
@@ -72,10 +74,29 @@ class Member
     public function setUserPhone($userPhone)
     {
         if ($userPhone == null || $userPhone == "") {
-            throw new Exception("ID錯誤");
+            throw new Exception("電話錯誤");
         }
         $this->_userPhone = $userPhone;
         return true;
+    }
+
+    public function getUserStatus()
+    {
+        return $this->_userStatus;
+    }
+    public function setUserStatus($userStatus)
+    {
+        if ($userStatus == null || $userStatus == "") {
+            throw new Exception("狀態錯誤");
+        }
+        $this->_userStatus = $userStatus;
+        return true;
+    }
+
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        return $vars;
     }
 
     public function showData()
@@ -85,6 +106,7 @@ class Member
         echo ("Password:" . $this->getUserPassword());
         echo ("Name:" . $this->getUserName());
         echo ("Email:" . $this->getUserEmail());
+        echo ("Phone:" . $this->getUserPhone());
         echo ("Phone:" . $this->getUserPhone());
     }
 }

@@ -58,7 +58,6 @@ class EmployeeDAO_PDO implements EmployeeDAO
         return true;
     }
 
-    //之後需增加檢查是否有訂單
     public function deleteEmployeeByID($id)
     {
         try {
@@ -110,7 +109,6 @@ class EmployeeDAO_PDO implements EmployeeDAO
             $sth->bindParam("empID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_ASSOC);
-            echo ($request);
 
             $employees = new Employee($request['empID']);
 

@@ -4,16 +4,16 @@ require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/config.php";
 class MemberDAO_PDO implements MemberDAO
 {
 
-    private $_strInsert = "INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`) VALUES (:userID,:userPassword,:userName,:userEmail,:userPhone);";
-    private $_strUpdate = "UPDATE `Members` SET `userPassword`=:userPassword,`userName`=:userName,`userEmail`=:userEmail,`userPhone`=:userPhone WHERE `userID`=:userID;";
+    private $_strInsert = "INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`, `userStatus`) VALUES (:userID,:userPassword,:userName,:userEmail,:userPhone,:userStatus);";
+    private $_strUpdate = "UPDATE `Members` SET `userPassword`=:userPassword,`userName`=:userName,`userEmail`=:userEmail,`userPhone`=:userPhone,`userStatus`=:userStatus WHERE `userID`=:userID;";
     private $_strDelete = "DELETE FROM `Members` WHERE `userID` = :userID;";
     private $_strCheckMemberExist = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID;";
-    private $_strGetAll = "SELECT `userID`, `userName`, `userEmail`, `userPhone` FROM `Members`;";
-    private $_strGetOne = "SELECT `userID`, `userName`, `userEmail`, `userPhone` FROM `Members` WHERE `userID` = :userID;";
-    private $_strDoLogin = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID AND `userPassword` = :userPassword;";
+    private $_strGetAll = "SELECT `userID`, `userName`, `userEmail`, `userPhone`, `userStatus` FROM `Members`;";
+    private $_strGetOne = "SELECT `userID`, `userName`, `userEmail`, `userPhone`, `userStatus` FROM `Members` WHERE `userID` = :userID;";
+    private $_strDoLogin = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID AND `userPassword` = :userPassword AND `userStatus` = true;";
 
     //新增會員
-    public function insertMember($id, $password, $name, $email, $phone)
+    public function insertMember($id, $password, $name, $email, $phone, $status)
     {
         try {
             $dbh = (new Config)->getDBConnect();
@@ -24,6 +24,7 @@ class MemberDAO_PDO implements MemberDAO
             $sth->bindParam("userName", $name);
             $sth->bindParam("userEmail", $email);
             $sth->bindParam("userPhone", $phone);
+            $sth->bindParam("userStatus", $status);
             $sth->execute();
             $dbh->commit();
             $sth = null;
@@ -37,7 +38,14 @@ class MemberDAO_PDO implements MemberDAO
     //新增會員 用物件
     public function insertMemberByObj($member)
     {
-        return $this->insertMember($member->getUserID(), $member->getUserPassword(), $member->getUserName(), $member->getUserEmail(), $member->getUserPhone());
+        return $this->insertMember(
+            $member->getUserID(),
+            $member->getUserPassword(),
+            $member->getUserName(),
+            $member->getUserEmail(),
+            $member->getUserPhone(),
+            $member->getUserStatus()
+        );
     }
 
     //更新會員
@@ -52,6 +60,7 @@ class MemberDAO_PDO implements MemberDAO
             $sth->bindParam("userName", $member->getUserName());
             $sth->bindParam("userEmail", $member->getUserEmail());
             $sth->bindParam("userPhone", $member->getUserPhone());
+            $sth->bindParam("userStatus", $member->getUserStatus());
             $sth->execute();
             $dbh->commit();
             $sth = null;
@@ -96,7 +105,13 @@ class MemberDAO_PDO implements MemberDAO
             $sth = $dbh->query($this->_strGetAll);
             $request = $sth->fetchAll(PDO::FETCH_ASSOC);
             foreach ($request as $item) {
-                $members[] = new Member($item['userID'], $item['userName'], $item['userEmail'], $item['userPhone']);
+                $members[] = new Member(
+                    $item['userID'],
+                    $item['userName'],
+                    $item['userEmail'],
+                    $item['userPhone'],
+                    $item['userStatus']
+                );
             }
             $sth = null;
         } catch (PDOException $err) {
@@ -115,9 +130,14 @@ class MemberDAO_PDO implements MemberDAO
             $sth->bindParam("userID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_ASSOC);
-            echo ($request);
 
-            $member = new Member($request['userID'], $request['userName'], $request['userEmail'], $request['userPhone']);
+            $member = new Member(
+                $request['userID'],
+                $request['userName'],
+                $request['userEmail'],
+                $request['userPhone'],
+                $request['userStatus']
+            );
 
             $sth = null;
         } catch (PDOException $err) {

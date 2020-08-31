@@ -18,21 +18,61 @@
 
 	<!-- Custom styles for this template -->
 	<link href="/PID_Assignment/views/css/signin.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script>
+	//檢查是否要登出
+	$.ajax({
+		type: "GET",
+		url: "/PID_Assignment/employee/getSessionEmpID"
+	}).then(function (e) {
+		if (e) {
+			$.ajax({
+				type: "GET",
+				url: "/PID_Assignment/employee/logout"
+			});
+		}
+	});
+</script>
 
 <body class="text-center">
 	<form class="form-signin">
 		<a href="/PID_Assignment/views/pageBack/commodityList.html"><img class="mb-4"
 				src="/PID_Assignment/views/img/logo.png" alt="回首頁" style="background-color: black;"></a>
 		<h1 class="h3 mb-3 font-weight-normal">員工登入</h1>
-		<label for="userID" class="sr-only">帳號</label>
-		<input type="text" id="userID" name="userID" class="form-control" placeholder="帳號" required autofocus>
-		<label for="userPassword" class="sr-only">密碼</label>
-		<input type="password" id="userPassword" name="userPassword" class="form-control" placeholder="密碼" required>
+		<label for="empID" class="sr-only">帳號</label>
+		<input type="text" id="empID" name="empID" class="form-control" placeholder="帳號" required autofocus>
+		<label for="empPassword" class="sr-only">密碼</label>
+		<input type="password" id="empPassword" name="empPassword" class="form-control" placeholder="密碼" required>
 		<button class="btn btn-lg btn-primary btn-block" id="login" type="button">登入</button>
 		<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
 	</form>
 
 </body>
+<script type="module">
+	import { Member } from "../js/models/member.js";
+
+	$(window).ready(() => {
+
+		//登入按鈕事件
+		$("#login").click(() => {
+			let data = {
+				id: $("#empID").val(),
+				password: $("#empPassword").val()
+			};
+			$.ajax({
+				type: "POST",
+				url: "/PID_Assignment/employee/login",
+				data: data
+			}).then(function (e) {
+				if (e) {
+					window.location.href = "/PID_Assignment/views/pageBack/commodityList.html";
+					return;
+				}
+				alert("帳密錯誤");
+			});
+		});
+	});
+</script>
 
 </html>

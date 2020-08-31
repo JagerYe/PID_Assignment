@@ -23,6 +23,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body class="author-template">
@@ -54,7 +55,13 @@
 				</ul>
 				<span class="socialheader row">
 					<div class="col" id="userName">userName</div>
-					<a class="col" href="/PID_Assignment/views/pageFront/login.html">登入</a>
+					<div class="col">
+						<a id="textLogin" href="/PID_Assignment/views/pageFront/login.html">登入</a>
+					</div>
+					<div class="col" id="textregistered">
+						<a href="/PID_Assignment/views/pageFront/registered.html">註冊</a>
+					</div>
+	
 				</span>
 			</div>
 		</nav>
@@ -74,6 +81,7 @@
 		</footer>
 	</div>
 </body>
+<script type="module" src="/PID_Assignment/views/js/title.js"></script>
 <script type="module">
 	import { Commodity } from "../js/models/commodity.js";
 	var commoditys = [

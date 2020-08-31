@@ -1,5 +1,5 @@
 <?php
-class Commodity
+class Commodity implements \JsonSerializable
 {
     private $_commodityID;
     private $_commodityName;
@@ -110,6 +110,11 @@ class Commodity
     {
         $this->_commodityImage = $commodityImage;
         return true;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
     public function showData()

@@ -9,6 +9,7 @@ CREATE TABLE `Members`(
     `userName` VARCHAR(20) NOT NULL,
     `userEmail` VARCHAR(50) NOT NULL,
     `userPhone` VARCHAR(20) NOT NULL,
+    `userStatus` BOOLEAN NOT NULL,
     PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -52,12 +53,13 @@ CREATE TABLE `OrderDetails` (
   FOREIGN KEY (`commodityID`) REFERENCES `Commoditys`(`commodityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`) VALUES ('a01','123456','a01','a01@gmail.com','0911111111'),
-('a02','123456','a02','a02@gmail.com','0922222222'),
-('a03','123456','a03','a03@gmail.com','0933333333'),
-('a04','123456','a04','a04@gmail.com','0944444444'),
-('a05','123456','a05','a05@gmail.com','0955555555'),
-('a06','123456','a06','a06@gmail.com','0966666666');
+INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`, `userStatus`) VALUES 
+('a01','123456','a01','a01@gmail.com','0911111111',true),
+('a02','123456','a02','a02@gmail.com','0922222222',true),
+('a03','123456','a03','a03@gmail.com','0933333333',false),
+('a04','123456','a04','a04@gmail.com','0944444444',true),
+('a05','123456','a05','a05@gmail.com','0955555555',true),
+('a06','123456','a06','a06@gmail.com','0966666666',false);
 
 INSERT INTO `Employees`(`empID`, `empPassword`) VALUES ('emp1','123456');
 

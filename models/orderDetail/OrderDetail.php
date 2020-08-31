@@ -1,5 +1,5 @@
 <?php
-class OrderDetail
+class OrderDetail implements \JsonSerializable
 {
     private $_orderID;
     private $_commodityID;
@@ -67,6 +67,10 @@ class OrderDetail
         return true;
     }
 
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 
     public function showData()
     {

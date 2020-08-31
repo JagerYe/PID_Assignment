@@ -1,10 +1,10 @@
 <?php
-class Employee
+class Employee implements \JsonSerializable
 {
     private $_empID;
     private $_empPassword;
 
-    public function __construct($empID,$empPassword = 0)
+    public function __construct($empID, $empPassword = 0)
     {
         $this->setEmpID($empID);
         $this->setEmpPassword($empPassword);
@@ -31,6 +31,11 @@ class Employee
     {
         $this->_empPassword = $empPassword;
         return true;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
     public function showData()

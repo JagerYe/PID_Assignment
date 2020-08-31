@@ -51,16 +51,15 @@ require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/member/MemberSer
 // $members = $memberDAO->getAllMember();
 // var_dump($members);
 
-//此方法會讓$item得不到member的class
-// foreach ($members as $item) {
-//     var_dump($item);
-//     $item->showDate();
-// }
+foreach ($members as $item) {
+    var_dump($item);
+    $item->showData();
+}
 
-// for ($i = 0; $i < count($members); $i++) {
-//     $members[$i]->showData();
-//     var_dump($members[$i]);
-// }
+for ($i = 0; $i < count($members); $i++) {
+    $members[$i]->showData();
+    var_dump($members[$i]);
+}
 //取得所有測試----------------------------------------
 
 //取得指定會員測試----------------------------------------
