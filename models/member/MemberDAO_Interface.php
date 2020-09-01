@@ -7,4 +7,5 @@ interface MemberDAO
     public function getOneMemberByID($id);
     public function getAllMember();
     public function doLogin($id, $password);
+    public function checkMemberExist($id);
 }

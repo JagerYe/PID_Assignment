@@ -24,7 +24,7 @@ class Member implements \JsonSerializable
     }
     public function setUserID($userID)
     {
-        if ($userID === null || $userID == "") {
+        if (!preg_match("/\w{6,30}/", $userID)) {
             throw new Exception("ID格式錯誤");
         }
         $this->_userID = $userID;
@@ -60,7 +60,8 @@ class Member implements \JsonSerializable
     }
     public function setUserEmail($userEmail)
     {
-        if ($userEmail === null || $userEmail == "") {
+        $emailRule = "/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/";
+        if (!preg_match($emailRule, $userEmail)) {
             throw new Exception("email格式錯誤");
         }
         $this->_userEmail = $userEmail;
@@ -73,7 +74,7 @@ class Member implements \JsonSerializable
     }
     public function setUserPhone($userPhone)
     {
-        if ($userPhone === null || $userPhone == "") {
+        if (!preg_match("/\d{10}/", $userPhone)) {
             throw new Exception("電話錯誤");
         }
         $this->_userPhone = $userPhone;

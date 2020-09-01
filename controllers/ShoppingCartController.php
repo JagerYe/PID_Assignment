@@ -99,10 +99,11 @@ class ShoppingCartController extends Controller
             return false;
         }
 
-        include_once require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commodity/CommodityService.php";
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commodity/CommodityService.php";
         $commodityDAO = (new CommodityService)->getDAO();
         $jsonArr = json_decode($_SESSION['shoppingCart']);
         $total = 0;
+        $errMassege = "";
         foreach ($jsonArr as $jsonObj) {
             $id = $jsonObj->_commodityID;
             $quantity = $jsonObj->_buyQuantity;

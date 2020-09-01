@@ -30,7 +30,7 @@ class MemberController extends Controller
 
     public function insert($id, $password, $name, $email, $phone, $status)
     {
-        if ($password == null || strlen($password) <= 0) {
+        if (!preg_match("/\w{6,30}/", $password)) {
             return false;
         }
 
@@ -47,9 +47,10 @@ class MemberController extends Controller
             return false;
         }
         $password = $member->getUserPassword();
-        if ($password == null || strlen($password) <= 0) {
+        if (!preg_match("/\w{6,30}/", $password)) {
             return false;
         }
+
         if ($this->_dao->insertMemberByObj($member)) {
             return true;
         }
@@ -120,5 +121,10 @@ class MemberController extends Controller
     {
         unset($_SESSION['userID']);
         unset($_SESSION['userName']);
+    }
+
+    public function checkMemberExist($id)
+    {
+        return ($this->_dao->checkMemberExist($id)) > 0;
     }
 }

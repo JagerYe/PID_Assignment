@@ -37,6 +37,79 @@
 		}
 	});
 </script>
+<script type="module">
+	import { Member } from "../js/models/member.js";
+
+	$(window).ready(() => {
+
+		$("#userPassword_").change(function (e) {
+			if ($("#userPassword").val() != $("#userPassword_").val()) {
+				$("#passwordCheckMessage").text("密碼不一致！");
+			} else {
+				$("#passwordCheckMessage").empty();
+			}
+		});
+
+		$("#userID").change(function (e) {
+			$.ajax({
+				type: "GET",
+				url: `/PID_Assignment/member/checkMemberExist?id=${$("#userID").val()}`
+			}).then(function (e) {
+				if (e) {
+					$("#idCheckMessage").text("此帳號有人使用");
+				} else {
+					$("#idCheckMessage").text("");
+				}
+			});
+		});
+
+		$("#btnSub").click(() => {
+			let member = new Member($("#userID").val(),
+				$("#userName").val(),
+				$("#userEmail").val(),
+				$("#userPhone").val(),
+				true,
+				$("#userPassword").val());
+			if ((member.userPassword != $("#userPassword_").val()) || !member.userPassword.match(/\w{6,30}/)) {
+				alert("密碼格式錯誤！");
+				return;
+			}
+			if (member.userName.length <= 0) {
+				alert("名字空白！");
+				return;
+			}
+			let emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+			if (!member.userEmail.match(emailRule)) {
+				alert("Email格式錯誤");
+				return;
+			}
+			if (!member.userPhone.match(/\d{10}/)) {
+				alert("電話格式錯誤");
+				return;
+			}
+			if (!member.userID.match(/\w{6,30}/)) {
+				alert("帳號格式錯誤");
+				return;
+			}
+			let subData = {
+				member: JSON.stringify(member)
+			}
+			$.ajax({
+				type: "POST",
+				url: "/PID_Assignment/member/insertByObj",
+				data: subData
+			}).then(function (e) {
+				if (e) {
+					alert("註冊成功，請登入");
+					window.location.href = "/PID_Assignment/views/pageFront/login.html";
+				} else {
+					alert("註冊失敗");
+				}
+			});
+
+		});
+	});
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
@@ -74,6 +147,7 @@
 							</div>
 							<input id="userID" class="form-control" placeholder="請輸入帳號" type="text">
 						</div> <!-- form-group// -->
+						<p class="form-group" id="idCheckMessage"></p>
 
 						<div class="form-group input-group">
 							<div class="input-group-prepend">
@@ -116,64 +190,5 @@
 	</div>
 
 </body>
-<script type="module">
-	import { Member } from "../js/models/member.js";
-
-	$(window).ready(() => {
-
-		$("#userPassword_").change(function (e) {
-			if ($("#userPassword").val() != $("#userPassword_").val()) {
-				$("#passwordCheckMessage").text("密碼不一致！");
-			} else {
-				$("#passwordCheckMessage").empty();
-			}
-		});
-
-		$("#btnSub").click(() => {
-			let member = new Member($("#userID").val(),
-				$("#userName").val(),
-				$("#userEmail").val(),
-				$("#userPhone").val(),
-				true,
-				$("#userPassword").val());
-			if ((member.userPassword != $("#userPassword_").val()) || member.userPassword.length <= 0) {
-				alert("密碼格式錯誤！");
-				return;
-			}
-			if (member.userName.length <= 0) {
-				alert("名字空白！");
-				return;
-			}
-			if (member.userEmail.length <= 0) {
-				alert("Email空白！");
-				return;
-			}
-			if (member.userPhone.length <= 0) {
-				alert("電話空白！");
-				return;
-			}
-			if (member.userID.length <= 0) {
-				alert("帳號空白！");
-				return;
-			}
-			let subData = {
-				member: JSON.stringify(member)
-			}
-			$.ajax({
-				type: "POST",
-				url: "/PID_Assignment/member/insertByObj",
-				data: subData
-			}).then(function (e) {
-				if (e) {
-					alert("註冊成功，請登入");
-					window.location.href = "/PID_Assignment/views/pageFront/login.html";
-				} else {
-					alert("註冊失敗");
-				}
-			});
-
-		});
-	});
-</script>
 
 </html>

@@ -57,6 +57,7 @@
 
 				commoditys.push(commodity);
 			}
+
 		});
 
 		//更新所有購物車
@@ -82,8 +83,6 @@
 					shoppingCartUpdate(shoppingCart)
 				});
 			}
-
-
 
 			$("#total").text(`總價格:${objs['total']}`);
 
@@ -128,6 +127,11 @@
 	$(window).ready(() => {
 		//結帳事件
 		$("#checkout").click(() => {
+			if (($("#userName").text()).length <= 0) {
+				alert("請先登入");
+				window.location.href = "/PID_Assignment/views/pageFront/login.html";
+				return;
+			}
 			let date = new Date();
 			let now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 			let postData = {
@@ -140,7 +144,7 @@
 			}).then(function (e) {
 				if (e) {
 					alert("成功");
-					window.location.href = "/PID_Assignment/views/pageBack/login.html";
+					window.location.href = "/PID_Assignment/views/pageFront/order.html";
 				} else {
 					alert("失敗");
 				}

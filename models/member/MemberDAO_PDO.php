@@ -10,7 +10,8 @@ class MemberDAO_PDO implements MemberDAO
     private $_strCheckMemberExist = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID;";
     private $_strGetAll = "SELECT `userID`, `userName`, `userEmail`, `userPhone`, `userStatus` FROM `Members`;";
     private $_strGetOne = "SELECT `userID`, `userName`, `userEmail`, `userPhone`, `userStatus` FROM `Members` WHERE `userID` = :userID;";
-    private $_strDoLogin = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID AND `userPassword` = :userPassword AND `userStatus` = true;";
+    private $_strLoginID = "SELECT COUNT(`userID`) FROM `members` WHERE `userID`=:userID AND `userStatus` = true;";
+    private $_strLoginPassword = "SELECT `userPassword` FROM `members` WHERE `userID`=:userID";
 
     //新增會員
     public function insertMember($id, $password, $name, $email, $phone, $status)
@@ -20,11 +21,12 @@ class MemberDAO_PDO implements MemberDAO
             $dbh->beginTransaction();
             $sth = $dbh->prepare($this->_strInsert);
             $sth->bindParam("userID", $id);
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $sth->bindParam("userPassword", $password);
             $sth->bindParam("userName", $name);
             $sth->bindParam("userEmail", $email);
             $sth->bindParam("userPhone", $phone);
-            $status = ($status->getUserStatus()) ? 1 : 0;
+            $status = ($status) ? 1 : 0;
             $sth->bindParam("userStatus", $status);
             $sth->execute();
             $dbh->commit();
@@ -153,17 +155,38 @@ class MemberDAO_PDO implements MemberDAO
     {
         try {
             $dbh = (new Config)->getDBConnect();
-            $sth = $dbh->prepare($this->_strDoLogin);
+            $sth = $dbh->prepare($this->_strLoginID);
             $sth->bindParam("userID", $id);
-            $sth->bindParam("userPassword", $password);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_NUM);
-            $sth = null;
+            if ($request['0'] != 1) {
+                throw new Exception("帳號錯誤");
+            }
+            $sth = $dbh->prepare($this->_strLoginPassword);
+            $sth->bindParam("userID", $id);
+            $sth->execute();
+            $request = $sth->fetch(PDO::FETCH_NUM);
         } catch (PDOException $err) {
             echo ($err->__toString());
             return false;
         }
         $dbh = null;
+        $a = password_verify($password, $request['0']);
+        return $a;
+    }
+
+    public function checkMemberExist($id)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $dbh->beginTransaction();
+            $sth = $dbh->prepare($this->_strCheckMemberExist);
+            $sth->bindParam("userID", $id);
+            $sth->execute();
+            $request = $sth->fetch(PDO::FETCH_NUM);
+        } catch (Exception $err) {
+            return false;
+        }
         return $request['0'];
     }
 }

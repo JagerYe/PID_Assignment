@@ -7,4 +7,5 @@ interface OrderDetailDAO
     public function deleteOrderDetailByID($orderID, $commodityID);
     public function getOneOrderDetailByID($orderID, $commodityID);
     public function getAllOrderDetails();
+    public function getOrderDetailByOrderID($orderID);
 }

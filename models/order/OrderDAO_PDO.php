@@ -9,8 +9,9 @@ class OrderDAO_PDO implements OrderDAO
     private $_strUpdate = "UPDATE `orders` SET `userID`=:userID,`orderDate`=:orderDate WHERE `orderID`=:orderID;";
     private $_strDelete = "DELETE FROM `orders` WHERE `orderID`=:orderID;";
     private $_strCheckOrderExist = "SELECT COUNT(*) FROM `orders` WHERE `orderID`=:orderID;";
-    private $_strGetAll = "SELECT `orderID`, `userID`, `orderDate`, ( SELECT SUM( `orderCommodityPrice` * `orderCommodityQuantity`) FROM `orderDetails` AS od WHERE od.`orderID` = o.`orderID`) AS total FROM `orders` AS o;";
-    private $_strGetOne = "SELECT * FROM `orders` WHERE `orderID`=:orderID;";
+    private $_strGetAll = "SELECT `orderID`, `userID`, `orderDate`, ( SELECT SUM( `orderCommodityPrice` * `orderCommodityQuantity`) FROM `orderDetails` AS od WHERE od.`orderID` = o.`orderID`) AS total FROM `orders` AS o ORDER BY `orderDate` DESC;";
+    private $_strGetOne = "SELECT `orderID`, `userID`, `orderDate`, ( SELECT SUM( `orderCommodityPrice` * `orderCommodityQuantity`) FROM `orderDetails` AS od WHERE od.`orderID` = o.`orderID`) AS total FROM `orders` AS o WHERE `orderID`=:orderID ORDER BY `orderDate` DESC;";
+    private $_strGetUserID = "SELECT `orderID`, `userID`, `orderDate`, ( SELECT SUM( `orderCommodityPrice` * `orderCommodityQuantity`) FROM `orderDetails` AS od WHERE od.`orderID` = o.`orderID`) AS total FROM `orders` AS o WHERE `userID`=:userID ORDER BY `orderDate` DESC ;";
 
     //新增
     public function insertOrder($userID, $orderDate, $orderDetails)
@@ -167,5 +168,30 @@ class OrderDAO_PDO implements OrderDAO
         }
         $dbh = null;
         return $order;
+    }
+
+    public function getOrderByUserID($id)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $sth = $dbh->prepare($this->_strGetUserID);
+            $sth->bindParam("userID", $id);
+            $sth->execute();
+            $request = $sth->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($request as $item) {
+                $orders[] = new Order(
+                    $item['orderID'],
+                    $item['userID'],
+                    $item['orderDate'],
+                    $item['total']
+                );
+            }
+            $sth = null;
+        } catch (PDOException $err) {
+            $dbh->rollBack();
+            return false;
+        }
+        $dbh = null;
+        return $orders;
     }
 }

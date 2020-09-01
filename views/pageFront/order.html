@@ -41,6 +41,120 @@
 		}
 	});
 </script>
+<script type="module" src="/PID_Assignment/views/js/title.js"></script>
+<script type="module">
+	import { Order } from "../js/models/order.js";
+	import { OrderDetail } from "../js/models/orderDetail.js";
+
+	import { OrderViewModel } from "../js/viewModels/orderViewModel.js";
+
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+	//無關注
+	// var orders = [
+	// 	new Order(0, "2020-01-01", false),
+	// 	new Order(1, "2020-01-01", false),
+	// 	new Order(2, "2020-01-01", false)
+	// ];
+	//有關注
+	// var orders = [
+	// 	new Order(0, "2020-01-01", false),
+	// 	new Order(1, "2020-01-01", false),
+	// 	new Order(2, "2020-01-01", true)
+	// ];
+
+	// var orderDetails = [
+	// 	new OrderDetail(0, "11", 90, 3),
+	// 	new OrderDetail(0, "12", 30, 4),
+	// 	new OrderDetail(0, "13", 70, 1),
+	// 	new OrderDetail(1, "11", 90, 2),
+	// 	new OrderDetail(1, "14", 30, 1),
+	// 	new OrderDetail(1, "15", 70, 1),
+	// 	new OrderDetail(2, "12", 90, 3),
+	// 	new OrderDetail(2, "13", 30, 3),
+	// 	new OrderDetail(2, "14", 70, 2)
+	// ];
+
+	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+	// function orderTotal(id) {
+	// 	let total = 0;
+	// 	for (let item of orderDetails) {
+	// 		if (item.orderID != id) {
+	// 			continue;
+	// 		}
+	// 		total += item.orderCommodityPrice * item.orderCommodityQuantity;
+	// 	}
+	// 	return total;
+	// }
+
+	$(window).ready(() => {
+		$("#orders").empty();
+		$.ajax({
+			type: "GET",
+			url: "/PID_Assignment/order/getUserOrder"
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let order = new Order(
+					item['_orderID'],
+					item['_orderDate'],
+					item['_attention'],
+					item['_userID'],
+					item['_total']
+				);
+				$("#orders").append(OrderViewModel.getOrderView(
+					order.orderID,
+					order.orderDate,
+					order.total)
+				);
+
+				$(`#aOrder${order.orderID}`).click(function () {
+					order.attention = !order.attention;
+					orderDetailLayout(order);
+				});
+			}
+		});
+
+	});
+
+	//訂單明細生成
+	function orderDetailLayout(order) {
+		let id = order.orderID;
+		if (!order.attention) {
+			$(`#orderDetails${id}`).empty();
+			return;
+		}
+		$(`#orderDetails${id}`).html(`
+			<li class="row">
+				<div class="col-3">訂單明細</div>
+				<div class="col-3">商品名稱</div>
+				<div class="col-3">購買價格</div>
+				<div class="col-3">購買數量</div>
+			</li><br>
+		`);
+		//此預計在另外做伺服請求
+
+		$.ajax({
+			type: "GET",
+			url: `/PID_Assignment/orderDetail/getOrderDetail?id=${id}`
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let orderDetail = new OrderDetail(
+					item['_orderID'],
+					item['_commodityName'],
+					item['_orderCommodityPrice'],
+					item['_orderCommodityQuantity']
+				);
+
+				$(`#orderDetails${id}`)
+					.append(OrderViewModel.getDetailsView(orderDetail.commodityNane,
+						orderDetail.orderCommodityPrice, orderDetail.orderCommodityQuantity));
+			}
+		});
+
+	}
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
@@ -111,99 +225,5 @@
 	</div>
 
 </body>
-<script type="module" src="/PID_Assignment/views/js/title.js"></script>
-<script type="module">
-	import { Order } from "../js/models/order.js";
-	import { OrderDetail } from "../js/models/orderDetail.js";
-
-	import { OrderViewModel } from "../js/viewModels/orderViewModel.js";
-
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
-	//無關注
-	// var orders = [
-	// 	new Order(0, "2020-01-01", false),
-	// 	new Order(1, "2020-01-01", false),
-	// 	new Order(2, "2020-01-01", false)
-	// ];
-	//有關注
-	var orders = [
-		new Order(0, "2020-01-01", false),
-		new Order(1, "2020-01-01", false),
-		new Order(2, "2020-01-01", true)
-	];
-
-	var orderDetails = [
-		new OrderDetail(0, "11", 90, 3),
-		new OrderDetail(0, "12", 30, 4),
-		new OrderDetail(0, "13", 70, 1),
-		new OrderDetail(1, "11", 90, 2),
-		new OrderDetail(1, "14", 30, 1),
-		new OrderDetail(1, "15", 70, 1),
-		new OrderDetail(2, "12", 90, 3),
-		new OrderDetail(2, "13", 30, 3),
-		new OrderDetail(2, "14", 70, 2)
-	];
-
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-	function orderTotal(id) {
-		let total = 0;
-		for (let item of orderDetails) {
-			if (item.orderID != id) {
-				continue;
-			}
-			total += item.orderCommodityPrice * item.orderCommodityQuantity;
-		}
-		return total;
-	}
-
-	//訂單明細生成
-	function orderDetailLayout(order) {
-		let id = order.orderID;
-		if (!order.attention) {
-			$(`#orderDetails${id}`).empty();
-			return;
-		}
-		$(`#orderDetails${id}`).html(`
-				<li class="row">
-					<div class="col-3">訂單明細</div>
-					<div class="col-3">商品名稱</div>
-					<div class="col-3">購買價格</div>
-					<div class="col-3">購買數量</div>
-				</li><br>
-			`);
-		//此預計在另外做伺服請求
-		for (let item of orderDetails) {
-			if (item.orderID != id) {
-				continue;
-			}
-			$(`#orderDetails${id}`)
-				.append(OrderViewModel.getDetailsView(item.commodityNane,
-					item.orderCommodityPrice, item.orderCommodityQuantity));
-		}
-	}
-
-	$(window).ready(() => {
-		$("#orders").empty();
-		orders.forEach(item => {
-
-			$("#orders").append(OrderViewModel.getOrderView(item.orderID, item.orderDate, orderTotal(item.orderID)));
-
-			$(`#aOrder${item.orderID}`).click(function () {
-				item.attention = !item.attention;
-				orderDetailLayout(item);
-			});
-
-			if (item.attention) {
-				orderDetailLayout(item);
-			}
-		});
-
-
-	});
-
-
-</script>
-<!-- orderID, orderDate, attention -->
 
 </html>

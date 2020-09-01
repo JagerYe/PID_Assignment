@@ -48,8 +48,7 @@ class OrderController extends Controller
     public function insertByObj($order, $orderDetails)
     {
         if ($id = $this->_dao->insertOrderByObj($order, $orderDetails)) {
-            $order = $this->getOne($id, true);
-            return $order;
+            return true;
         }
 
         return false;
@@ -84,7 +83,7 @@ class OrderController extends Controller
         return false;
     }
 
-    public function getOne($id, $attention = false)
+    public function getOne($id=1, $attention = false)
     {
         if ($order = $this->_dao->getOneOrderByID($id)) {
             $order->setOrderAttention($attention);
@@ -93,8 +92,22 @@ class OrderController extends Controller
         return false;
     }
 
+    public function getUserOrder()
+    {
+        if (!isset($_SESSION['userID'])) {
+            return false;
+        }
+        if ($orders = $this->_dao->getOrderByUserID("a01")) {
+            return json_encode($orders);
+        }
+        return false;
+    }
+
     public function checkout($date)
     {
+        if (!isset($_SESSION['userName'])) {
+            return false;
+        }
         $jsonArr = json_decode($_SESSION['shoppingCart']);
         $cdao = (new CommodityService())->getDAO();
         foreach ($jsonArr as $jsonObj) {
@@ -109,6 +122,11 @@ class OrderController extends Controller
             $orderDate[] = $item;
         }
         $order = new Order("???", $_SESSION['userID'], $date);
-        return $this->insertByObj($order, $orderDate);
+        if ($order = $this->insertByObj($order, $orderDate)) {
+            unset($_SESSION['shoppingCart']);
+            return $order;
+        } else {
+            return false;
+        }
     }
 }

@@ -11,6 +11,7 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
     private $_strCheckOrderDetailExist = "SELECT COUNT(*) FROM `orderdetails` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
     private $_strGetAll = "SELECT `orderID`, o.`commodityID`, `commodityName`, `orderCommodityPrice`, `orderCommodityQuantity` FROM `orderdetails` AS o INNER JOIN `commoditys` AS c ON o.`commodityID`=c.`commodityID`;";
     private $_strGetOne = "SELECT `orderID`, o.`commodityID`, `commodityName`, `orderCommodityPrice`, `orderCommodityQuantity` FROM `orderdetails` AS o INNER JOIN `commoditys` AS c ON o.`commodityID`=c.`commodityID` WHERE `orderID`=:orderID and `commodityID`=:commodityID;";
+    private $_strGetByOrderID = "SELECT `orderID`, o.`commodityID`, `commodityName`, `orderCommodityPrice`, `orderCommodityQuantity` FROM `orderdetails` AS o INNER JOIN `commoditys` AS c ON o.`commodityID`=c.`commodityID` WHERE `orderID`=:orderID;";
 
     //新增
     public function insertOrderDetail($orderID, $commodityID, $price, $quantity)
@@ -172,5 +173,32 @@ class OrderDetailDAO_PDO implements OrderDetailDAO
         }
         $dbh = null;
         return $orderDetail;
+    }
+
+    public function getOrderDetailByOrderID($orderID)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $sth = $dbh->prepare($this->_strGetByOrderID);
+            $sth->bindParam("orderID", $orderID);
+            $sth->execute();
+            $request = $sth->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($request as $item) {
+                $orderDetails[] = new OrderDetail(
+                    $item['orderID'],
+                    $item['commodityID'],
+                    $item['orderCommodityPrice'],
+                    $item['orderCommodityQuantity'],
+                    $item['commodityName']
+                );
+            }
+
+            $sth = null;
+        } catch (PDOException $err) {
+            echo ($err->__toString());
+            return false;
+        }
+        $dbh = null;
+        return $orderDetails;
     }
 }

@@ -7,4 +7,5 @@ interface OrderDAO
     public function deleteOrderByID($id);
     public function getOneOrderByID($id);
     public function getAllOrders();
+    public function getOrderByUserID($id);
 }

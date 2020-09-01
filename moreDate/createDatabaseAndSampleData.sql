@@ -5,7 +5,7 @@ USE `PID_Assignment`;
 DROP TABLE IF EXISTS `Members`;
 CREATE TABLE `Members`(
     `userID` VARCHAR(20) NOT NULL,
-    `userPassword` VARCHAR(20) NOT NULL,
+    `userPassword` TEXT NOT NULL,
     `userName` VARCHAR(20) NOT NULL,
     `userEmail` VARCHAR(50) NOT NULL,
     `userPhone` VARCHAR(20) NOT NULL,
@@ -54,12 +54,12 @@ CREATE TABLE `OrderDetails` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`, `userStatus`) VALUES 
-('a01','123456','a01','a01@gmail.com','0911111111',true),
-('a02','123456','a02','a02@gmail.com','0922222222',true),
-('a03','123456','a03','a03@gmail.com','0933333333',false),
-('a04','123456','a04','a04@gmail.com','0944444444',true),
-('a05','123456','a05','a05@gmail.com','0955555555',true),
-('a06','123456','a06','a06@gmail.com','0966666666',false);
+('a00001','123456','a01','a01@gmail.com','0911111111',true),
+('a00002','123456','a02','a02@gmail.com','0922222222',true),
+('a00003','123456','a03','a03@gmail.com','0933333333',false),
+('a00004','123456','a04','a04@gmail.com','0944444444',true),
+('a00005','123456','a05','a05@gmail.com','0955555555',true),
+('a00006','123456','a06','a06@gmail.com','0966666666',false);
 
 INSERT INTO `Employees`(`empID`, `empPassword`) VALUES ('emp1','123456');
 
@@ -74,11 +74,12 @@ INSERT INTO `Commoditys`(`commodityName`, `commodityPrice`, `commodityQuantity`,
 ('c009',50,0,'close','c00009'),
 ('c010',40,10000,'open','c00010');
 
-INSERT INTO `Orders`(`userID`, `orderDate`) VALUES ('a01','2020-08-08 17:00:00'),
-('a03','2020-08-10 06:00:00'),
-('a02','2020-08-11 15:00:00'),
-('a01','2020-08-15 11:00:00'),
-('a04','2020-08-20 03:00:00');
+INSERT INTO `Orders`(`userID`, `orderDate`) VALUES 
+('a00001','2020-08-08 17:00:00'),
+('a00003','2020-08-10 06:00:00'),
+('a00002','2020-08-11 15:00:00'),
+('a00001','2020-08-15 11:00:00'),
+('a00004','2020-08-20 03:00:00');
 
 INSERT INTO `OrderDetails`(`orderID`, `commodityID`, `orderCommodityPrice`, `orderCommodityQuantity`) VALUES (1,4,900,2),
 (2,1,35,10),

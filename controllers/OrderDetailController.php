@@ -83,14 +83,13 @@ class OrderDetailController extends Controller
         return false;
     }
 
-    // public function getOne($id)
-    // {
-    //     if ($member = $this->_dao->getOneMemberByID($id)) {
-    //         $a = json_encode($member);
-    //         return $a;
-    //     }
-    //     return false;
-    // }
+    public function getOrderDetail($id)
+    {
+        if ($details = $this->_dao->getOrderDetailByOrderID($id)) {
+            return json_encode($details);
+        }
+        return false;
+    }
 
     // public function login($id, $password)
     // {
