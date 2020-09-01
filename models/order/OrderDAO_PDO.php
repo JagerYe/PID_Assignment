@@ -153,7 +153,6 @@ class OrderDAO_PDO implements OrderDAO
             $sth->bindParam("orderID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_ASSOC);
-            echo ($request);
 
             $order = new Order(
                 $request['orderID'],

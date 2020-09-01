@@ -85,8 +85,7 @@ class CommodityController extends Controller
     public function getOne($id)
     {
         if ($commodity = $this->_dao->getOneCommodityByID($id)) {
-            $a = json_encode($commodity);
-            return $a;
+            return json_encode($commodity);
         }
         return false;
     }

@@ -30,6 +30,47 @@
 		}
 	</style>
 </head>
+<script type="module" src="/PID_Assignment/views/js/title.js"></script>
+<script type="module">
+	import { Commodity } from "../js/models/commodity.js";
+	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
+
+	$(window).ready(() => {
+		$.ajax({
+			type: "GET",
+			url: "/PID_Assignment/commodity/getAll"
+		}).then(function (e) {
+			// 顯示所有商品
+			$(".show").html("");
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let commodity = new Commodity(
+					item['_commodityID'],
+					item['_commodityName'],
+					item['_commodityPrice'],
+					item['_commodityQuantity'],
+					item['_commodityStatus'],
+					item['_commodityText']
+				);
+				if (commodity.commodityStatus == "close" || commodity.commodityQuantity <= 0 || item.commodityPrice <= 0) {
+					continue;
+				}
+				$(".show").append(CommodityViewModel.getMenuView(commodity.commodityID, commodity._commodityName, commodity._commodityPrice));
+			}
+		});
+
+
+		// $(".show").html("");
+		// commoditys.forEach(commodity => {
+		// 	if (item.commodityStatus == "close" || item.commodityQuantity <= 0 || item.commodityPrice <= 0) {
+		// 		return;
+		// 	}
+		// 	$(".show").append(CommodityViewModel.getMenuView(item.commodityID, item._commodityName, item._commodityPrice));
+		// });
+	});
+
+
+</script>
 
 <body class="home-template">
 
@@ -114,35 +155,5 @@
 	</footer>
 
 </body>
-<!-- <a class="col" id="textLogin" href="/PID_Assignment/views/pageFront/login.html">登入</a>
-<a class="col" id="textregistered" href="/PID_Assignment/views/pageFront/registered.html">註冊</a> -->
-<script type="module" src="/PID_Assignment/views/js/title.js"></script>
-<script type="module">
-	import { Commodity } from "../js/models/commodity.js";
-	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
-	var commoditys = [
-		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
-		new Commodity("12", "abc2", 22, 0, "open", "commodityText", null),
-		new Commodity("13", "abc3", 70, 70, "close", "commodityText", null),
-		new Commodity("14", "abc4", 50, 80, "open", "commodityText", null),
-		new Commodity("15", "abc5", -10, 50, "open", "commodityText", null),
-		new Commodity("16", "abc6", 42, 30, "close", "commodityText", null)
-	];
-
-
-	$(window).ready(() => {
-
-		// 顯示所有商品
-		$(".show").html("");
-		commoditys.forEach(item => {
-			if (item.commodityStatus == "close" || item.commodityQuantity <= 0 || item.commodityPrice <= 0) {
-				return;
-			}
-			$(".show").append(CommodityViewModel.getMenuView(item.commodityID, item._commodityName, item._commodityPrice));
-		});
-	});
-
-
-</script>
 
 </html>

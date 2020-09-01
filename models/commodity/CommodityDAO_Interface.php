@@ -6,4 +6,5 @@ interface CommodityDAO
     public function deleteCommodityByID($id);
     public function getOneCommodityByID($id);
     public function getAllCommoditys();
+    public function getCheckAndTotal($id, $quantity);
 }

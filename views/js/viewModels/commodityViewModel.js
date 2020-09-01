@@ -10,24 +10,38 @@ export class CommodityViewModel {
                             <img src="/PID_Assignment/views/img/gravatar.jpg">
                             <div class="card-body">
                                 <h2>${name}</h2>
-                                <p class="card-text">${price}</p>
+                                <p class="card-text">價格：${price}</p>
                             </div>
                         </div>
                     </a>
                 </div>`;
     }
 
-    static getShoppingCartView(name, price, commodityQuantity, buyQuantity) {
+    static getOneCommodityView(name, text, price, quantity) {
+        return `
+            <img src="/PID_Assignment/views/img/gravatar.jpg">
+            <h1 class="author-title">${name}</h1>
+            <h5>${text}</h5>
+            <h2 class="author-bio">${price}</h2>
+            <h3>
+                數量<input id="commodityQuantity" name="commodityQuantity" 
+                    type="number" min="0" max="${quantity}" value="1">
+            </h3>
+            <button id="addInCart" name="addInCart" type="button" class="btn btn-primary">加入購物車</button>
+        `;
+    }
+
+    static getShoppingCartView(name, price, commodityQuantity, buyQuantity, id) {
         return `<li class="row">
                     <div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
                     <div class="col-3">${name}</div>
                     <div class="col-3">${price}</div>
                     <div class="col-2">
-                        <input class="commodityQuantity" id="commodityQuantity" name="commodityQuantity" 
+                        <input class="commodityQuantity" id="commodityQuantity${id}" name="commodityQuantity" 
                             type="number" min="0" max="${commodityQuantity}" value="${buyQuantity}">
                     </div>
                     <div class="col-1">
-                        <button type="button" class="commodityDelete btn">刪除</button>
+                        <button type="button" id="commodityDelete${id}" class="commodityDelete btn">刪除</button>
                     </div>
                 </li>`;
     }

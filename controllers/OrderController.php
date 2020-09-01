@@ -5,9 +5,12 @@ class OrderController extends Controller
     public function __construct()
     {
         require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/order/OrderService.php";
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/commodity/CommodityService.php";
         require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/controllers/OrderDetailController.php";
         $this->_dao = (new OrderService())->getDAO();
         $this->model("order");
+        $this->model("orderDetail");
+        $this->model("commodity");
     }
 
     private function jsonToModel($str)
@@ -42,15 +45,8 @@ class OrderController extends Controller
         return false;
     }
 
-    public function insertByObj($orderStr, $detailsStr)
+    public function insertByObj($order, $orderDetails)
     {
-
-        $orderDetails = (new OrderDetailController())->jsonToModel($detailsStr);
-
-        if (!($order = $this->jsonToModel($orderStr))) {
-            return false;
-        }
-
         if ($id = $this->_dao->insertOrderByObj($order, $orderDetails)) {
             $order = $this->getOne($id, true);
             return $order;
@@ -95,5 +91,24 @@ class OrderController extends Controller
             return json_encode($order);
         }
         return false;
+    }
+
+    public function checkout($date)
+    {
+        $jsonArr = json_decode($_SESSION['shoppingCart']);
+        $cdao = (new CommodityService())->getDAO();
+        foreach ($jsonArr as $jsonObj) {
+            $commodity = $cdao->getOneCommodityByID($jsonObj->_commodityID);
+            $item = new OrderDetail(
+                "???",
+                $jsonObj->_commodityID,
+                $commodity->getCommodityPrice(),
+                $jsonObj->_buyQuantity,
+                $commodity->getCommodityName()
+            );
+            $orderDate[] = $item;
+        }
+        $order = new Order("???", $_SESSION['userID'], $date);
+        return $this->insertByObj($order, $orderDate);
     }
 }

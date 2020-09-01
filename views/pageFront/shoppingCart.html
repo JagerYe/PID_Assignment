@@ -25,6 +25,131 @@
 		crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script type="module" src="/PID_Assignment/views/js/title.js"></script>
+<script type="module">
+	import { Commodity } from "../js/models/commodity.js";
+	import { ShoppingCart } from "../js/models/shoppingCart.js";
+
+	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
+
+	//更新畫面
+	function updateMenu() {
+		let total = 0;
+		$("#shoppingCartList").html("");
+
+		//更新所有商品列表
+		let commoditys = new Array();
+		$.ajax({
+			type: "GET",
+			url: "/PID_Assignment/commodity/getAll",
+			async: false
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			for (let item of objs) {
+				let commodity = new Commodity(
+					item['_commodityID'],
+					item['_commodityName'],
+					item['_commodityPrice'],
+					item['_commodityQuantity'],
+					item['_commodityStatus'],
+					item['_commodityText']
+				);
+
+				commoditys.push(commodity);
+			}
+		});
+
+		//更新所有購物車
+		$.ajax({
+			type: "GET",
+			url: `/PID_Assignment/shoppingCart/getAll`
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			let shoppingCarts = new Array();
+			for (let item of objs['shoppingCart']) {
+				let shoppingCart = new ShoppingCart(item['_commodityID'], item['_buyQuantity']);
+				shoppingCarts.push(shoppingCart);
+				let commodity = commoditys.find(obj => obj.commodityID == shoppingCart.commodityID);
+				$("#shoppingCartList")
+					.append(CommodityViewModel.getShoppingCartView(commodity.commodityName,
+						commodity.commodityPrice, commodity.commodityQuantity, shoppingCart.buyQuantity, shoppingCart.commodityID));
+
+				$(`#commodityDelete${shoppingCart.commodityID}`).click(function () {
+					shoppingCartDelete(shoppingCart.commodityID);
+
+				});
+				$(`#commodityQuantity${shoppingCart.commodityID}`).change(function () {
+					shoppingCartUpdate(shoppingCart)
+				});
+			}
+
+
+
+			$("#total").text(`總價格:${objs['total']}`);
+
+		});
+
+		//刪除
+		function shoppingCartDelete(id) {
+			let deleteDate = {
+				id: id
+			}
+			$.ajax({
+				type: "DELETE",
+				url: "/PID_Assignment/shoppingCart/delete",
+				data: deleteDate
+			}).then(function (e) {
+				if (e) {
+					updateMenu();
+				}
+			});
+		}
+
+		//更新購物車
+		function shoppingCartUpdate(shoppingCart) {
+			shoppingCart.buyQuantity = $(`#commodityQuantity${shoppingCart.commodityID}`).val();
+			let putDate = {
+				shoppingCart: JSON.stringify(shoppingCart)
+			}
+			$.ajax({
+				type: "DELETE",
+				url: "/PID_Assignment/shoppingCart/updateByObj",
+				data: putDate
+			}).then(function (e) {
+				if (e) {
+					updateMenu();
+				}
+			});
+		}
+	}
+
+
+
+	$(window).ready(() => {
+		//結帳事件
+		$("#checkout").click(() => {
+			let date = new Date();
+			let now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+			let postData = {
+				date: now
+			};
+			$.ajax({
+				type: "POST",
+				url: "/PID_Assignment/order/checkout",
+				data: postData
+			}).then(function (e) {
+				if (e) {
+					alert("成功");
+					window.location.href = "/PID_Assignment/views/pageBack/login.html";
+				} else {
+					alert("失敗");
+				}
+			});
+		});
+
+		updateMenu();
+	});
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
@@ -51,7 +176,7 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-	
+
 				</ul>
 				<span class="socialheader row">
 					<div class="col" id="userName">userName</div>
@@ -61,7 +186,7 @@
 					<div class="col" id="textregistered">
 						<a href="/PID_Assignment/views/pageFront/registered.html">註冊</a>
 					</div>
-	
+
 				</span>
 			</div>
 		</nav>
@@ -99,94 +224,5 @@
 		</footer>
 	</div>
 </body>
-<script type="module" src="/PID_Assignment/views/js/title.js"></script>
-<script type="module">
-	import { Commodity } from "../js/models/commodity.js";
-	import { ShoppingCart } from "../js/models/shoppingCart.js";
-
-	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
-
-	// 假資料-------------------------------------------------------------------------
-	var commoditys = [
-		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
-		new Commodity("12", "abc2", 22, 50, "open", "commodityText", null),
-		new Commodity("13", "abc3", 70, 70, "open", "commodityText", null),
-		new Commodity("14", "abc4", 50, 100, "open", "commodityText", null),
-		new Commodity("15", "abc5", 10, 50, "open", "commodityText", null)
-	];
-
-	var shoppingCart = [
-		new ShoppingCart("11", 3),
-		new ShoppingCart("12", 3),
-		new ShoppingCart("13", 3),
-		new ShoppingCart("14", 3),
-		new ShoppingCart("15", 3)
-	];
-	// 假資料-------------------------------------------------------------------------
-
-	//清除購物車內錯誤資料，及提醒庫存不足
-	function checking(index) {
-		let commodity = commoditys.find(item => item.commodityID == shoppingCart[index].commodityID);
-		let str = "";
-		if (commodity === undefined) {
-			str = "我不知道您從哪生的東西，系統將會把那一筆資料刪除";
-		} else if (commodity.commodityPrice <= 0) {
-			str = commodity.commodityName + "的售價有問題，系統將會把那一筆資料刪除";
-		} else if (commodity.commodityStatus == "close") {
-			str = commodity.commodityName + "已下架，系統將會把那一筆資料刪除";
-		} else if (commodity.commodityQuantity <= 0 || commodity.commodityQuantity < shoppingCart[index].buyQuantity) {
-			alert((commodity.commodityQuantity <= 0) ?
-				commodity.commodityName + "目前沒有庫存" : "目前" + commodity.commodityName + "的庫存數量不足，系統會將數量調整為目前庫存量");
-			shoppingCart[index].buyQuantity = commodity.commodityQuantity;
-		}
-
-		if (str.length > 0) {
-			alert(str);
-			shoppingCart.splice(index, 1);
-			return false;
-		}
-
-		return commodity;
-	}
-
-	//更新畫面
-	function updateMenu() {
-		let total = 0;
-		$("#shoppingCartList").html("");
-		for (let i = 0; i < shoppingCart.length; i++) {
-			let commodity = checking(i);
-			if (!(commodity)) {
-				i--;
-				continue;
-			}
-
-			$("#shoppingCartList")
-				.append(CommodityViewModel.getShoppingCartView(commodity.commodityName,
-					commodity.commodityPrice, commodity.commodityQuantity, shoppingCart[i].buyQuantity));
-		}
-		$(".commodityDelete").click(function () {
-			shoppingCart.splice($(this).closest("li").index(), 1);
-			updateMenu();
-		});
-		$(".commodityQuantity").change(function () {
-			shoppingCart[$(this).closest("li").index()].buyQuantity = $(this).val();
-			$("#total").text("總價格:呼叫伺服");
-		});
-
-
-		$("#total").text("總價格:呼叫伺服");
-	}
-
-
-
-	$(window).ready(() => {
-		//結帳事件
-		$("#checkout").click(() => {
-			alert("呼叫Sesson的total");
-		});
-
-		updateMenu();
-	});
-</script>
 
 </html>

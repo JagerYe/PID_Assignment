@@ -25,6 +25,82 @@
 		crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script type="module" src="/PID_Assignment/views/js/title.js"></script>
+<script type="module">
+	import { Commodity } from "../js/models/commodity.js";
+	import { ShoppingCart } from "../js/models/shoppingCart.js";
+
+	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
+
+	//抓取?後的指定資料
+	var getUrlParameter = function getUrlParameter(sParam) {
+		var sPageURL = window.location.search.substring(1),
+			sURLVariables = sPageURL.split('&'),
+			sParameterName,
+			i;
+
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+
+			if (sParameterName[0] === sParam) {
+				return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+	};
+
+	let commodityID = getUrlParameter("commodityID");
+
+	$(window).ready(() => {
+
+		$.ajax({
+			type: "GET",
+			url: `/PID_Assignment/commodity/getOne?commodityID=${commodityID}`
+		}).then(function (e) {
+			let objs = JSON.parse(e);
+			let commodity = new Commodity(
+				objs['_commodityID'],
+				objs['_commodityName'],
+				objs['_commodityPrice'],
+				objs['_commodityQuantity'],
+				objs['_commodityStatus'],
+				objs['_commodityText']
+			);
+
+			//show資料
+			$("#item").html(
+				CommodityViewModel.getOneCommodityView(
+					commodity.commodityName,
+					commodity.commodityText,
+					commodity.commodityPrice,
+					commodity.commodityQuantity
+				)
+			);
+
+			$("#addInCart").click(() => {
+				// 加入購物車動作
+				addInShoppingCart(commodity.commodityID);
+			});
+		});
+	});
+
+	// 加入購物車動作
+	function addInShoppingCart(id) {
+		let item = new ShoppingCart(id, $("#commodityQuantity").val());
+		let postData = { shoppingCart: JSON.stringify(item) };
+		$.ajax({
+			type: "POST",
+			url: `/PID_Assignment/shoppingCart/addByObj`,
+			data: postData
+		}).then(function (e) {
+			if (e) {
+				alert("新增成功");
+				window.location.href = "/PID_Assignment/views/pageFront/shoppingCart.html";
+			} else {
+				alert("新增失敗");
+			}
+		});
+	}
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
@@ -51,7 +127,7 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-	
+
 				</ul>
 				<span class="socialheader row">
 					<div class="col" id="userName">userName</div>
@@ -61,7 +137,7 @@
 					<div class="col" id="textregistered">
 						<a href="/PID_Assignment/views/pageFront/registered.html">註冊</a>
 					</div>
-	
+
 				</span>
 			</div>
 		</nav>
@@ -81,61 +157,5 @@
 		</footer>
 	</div>
 </body>
-<script type="module" src="/PID_Assignment/views/js/title.js"></script>
-<script type="module">
-	import { Commodity } from "../js/models/commodity.js";
-	var commoditys = [
-		new Commodity("11", "abc1", 100, 50, "open", "commodityText", null),
-		new Commodity("12", "abc2", 22, 30, "open", "commodityText", null),
-		new Commodity("13", "abc3", 70, 70, "close", "commodityText", null),
-		new Commodity("14", "abc4", 50, 80, "open", "commodityText", null),
-		new Commodity("15", "abc5", 55, 50, "open", "commodityText", null),
-		new Commodity("16", "abc6", 42, 30, "close", "commodityText", null)
-	];
-
-	//抓取?後的指定資料
-	var getUrlParameter = function getUrlParameter(sParam) {
-		var sPageURL = window.location.search.substring(1),
-			sURLVariables = sPageURL.split('&'),
-			sParameterName,
-			i;
-
-		for (i = 0; i < sURLVariables.length; i++) {
-			sParameterName = sURLVariables[i].split('=');
-
-			if (sParameterName[0] === sParam) {
-				return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-			}
-		}
-	};
-
-	let commodityID = getUrlParameter("commodityID");
-
-
-	//假抓資料
-	//find雖然只會抓一筆，但只要是抓PK就沒差
-	let commodity = commoditys.find(item => item.commodityID == commodityID);
-	//-------------------------------------------------
-
-	$(window).ready(() => {
-		//show資料
-		$("#item").html(`
-			<img src="/PID_Assignment/views/img/gravatar.jpg">
-			<h1 class="author-title">${commodity.commodityName}</h1>
-			<h5>${commodity.commodityText}</h5>
-			<h2 class="author-bio">${commodity.commodityPrice}</h2>
-			<h3>
-				數量<input id="commodityQuantity" name="commodityQuantity" 
-					type="number" min="0" max="${commodity.commodityQuantity}" value="1">
-			</h3>
-			<button id="addInCart" name="addInCart" type="button" class="btn btn-primary">加入購物車</button>
-		`);
-
-		$("#addInCart").click(() => {
-			// 加入購物車動作
-			alert($("#commodityQuantity").val());
-		});
-	});
-</script>
 
 </html>

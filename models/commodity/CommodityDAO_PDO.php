@@ -10,6 +10,7 @@ class CommodityDAO_PDO implements CommodityDAO
     private $_strCheckCommodityExist = "SELECT COUNT(*) FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strGetAll = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys`;";
     private $_strGetOne = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys` WHERE `commodityID`=:commodityID;";
+    private $_strCheckAndTotal = "SELECT COUNT(*), SUM(`commodityPrice`*:commodityQuantity) FROM `Commoditys` WHERE `commodityID`=:commodityID AND `commodityPrice`>0 AND `commodityStatus`='open' AND `commodityQuantity`>=:commodityQuantity;";
     //BLOB之後測試
     // private $_strGetImg = "SELECT `commodityImage` FROM `commoditys` WHERE `commodityID`=:commodityID;";
     // private $_strUpdateImg = "UPDATE `commoditys` SET `commodityImage`=:commodityImage WHERE `commodityID`=:commodityID";
@@ -27,7 +28,7 @@ class CommodityDAO_PDO implements CommodityDAO
             $sth->bindParam("commodityStatus", $status);
             $sth->bindParam("commodityText", $text);
             $sth->execute();
-            $id=$dbh->lastInsertId();
+            $id = $dbh->lastInsertId();
             $dbh->commit();
             $sth = null;
         } catch (PDOException $err) {
@@ -133,7 +134,6 @@ class CommodityDAO_PDO implements CommodityDAO
             $sth->bindParam("commodityID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_ASSOC);
-            echo ($request);
 
             $commoditys = new Commodity(
                 $request['commodityID'],
@@ -151,5 +151,23 @@ class CommodityDAO_PDO implements CommodityDAO
         }
         $dbh = null;
         return $commoditys;
+    }
+
+    public function getCheckAndTotal($id, $quantity)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $sth = $dbh->prepare($this->_strCheckAndTotal);
+            $sth->bindParam("commodityID", $id);
+            $sth->bindParam("commodityQuantity", $quantity);
+            $sth->execute();
+            $request = $sth->fetch(PDO::FETCH_NUM);
+            $sth = null;
+        } catch (PDOException $err) {
+            echo ($err->__toString());
+            return false;
+        }
+        $dbh = null;
+        return $request;
     }
 }
