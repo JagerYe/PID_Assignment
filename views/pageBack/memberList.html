@@ -43,13 +43,7 @@
 	import { MemberViewModel } from "../js/viewModels/memberViewModel.js";
 	import { OrderViewModel } from "../js/viewModels/orderViewModel.js";
 
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
-
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
 	let members = new Array();
-	let orderDetails = new Array();
 	//更新畫面
 	function updateMenu() {
 		$("#list").empty();
@@ -76,7 +70,11 @@
 				} else {
 					$(`#orders${item.userID}`).empty();
 				}
+			});
+			$(`#select${item.userID}`).val(item.userStatus);
 
+			$(`#select${item.userID}`).change(() => {
+				changeStatus(item);
 			});
 
 		});
@@ -160,6 +158,31 @@
 			}
 		});
 
+	}
+
+	//會員狀態更改
+	function changeStatus(member) {
+		if (confirm(`確定要${(member.userStatus) ? "停用" : "恢復"}${member.userID}_${member.userName}？`)) {
+			member.userStatus = !member.userStatus;
+			let data = {
+				member: JSON.stringify(member)
+			}
+			$.ajax({
+				type: "PUT",
+				url: "/PID_Assignment/member/update",
+				data: data
+			}).then(function (e) {
+				if (!e) {
+					alert("更新失敗");
+					member.userStatus = !member.userStatus;
+					$(`#select${member.userID}`).val(($(`#select${member.userID}`).val() + 1) % 2);
+					return;
+				}
+				alert("更新成功");
+			});
+		} else {
+			$(`#select${member.userID}`).val(($(`#select${member.userID}`).val() + 1) % 2);
+		}
 	}
 
 	$(window).ready(() => {

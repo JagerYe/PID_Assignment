@@ -5,7 +5,7 @@ class MemberDAO_PDO implements MemberDAO
 {
 
     private $_strInsert = "INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`, `userStatus`) VALUES (:userID,:userPassword,:userName,:userEmail,:userPhone,:userStatus);";
-    private $_strUpdate = "UPDATE `Members` SET `userPassword`=:userPassword,`userName`=:userName,`userEmail`=:userEmail,`userPhone`=:userPhone,`userStatus`=:userStatus WHERE `userID`=:userID;";
+    private $_strUpdate = "UPDATE `Members` SET `userName`=:userName,`userEmail`=:userEmail,`userPhone`=:userPhone,`userStatus`=:userStatus WHERE `userID`=:userID;";
     private $_strDelete = "DELETE FROM `Members` WHERE `userID` = :userID;";
     private $_strCheckMemberExist = "SELECT COUNT(*) FROM `Members` WHERE `userID` = :userID;";
     private $_strGetAll = "SELECT `userID`, `userName`, `userEmail`, `userPhone`, `userStatus` FROM `Members`;";
@@ -24,6 +24,7 @@ class MemberDAO_PDO implements MemberDAO
             $sth->bindParam("userName", $name);
             $sth->bindParam("userEmail", $email);
             $sth->bindParam("userPhone", $phone);
+            $status = ($status->getUserStatus()) ? 1 : 0;
             $sth->bindParam("userStatus", $status);
             $sth->execute();
             $dbh->commit();
@@ -56,11 +57,11 @@ class MemberDAO_PDO implements MemberDAO
             $dbh->beginTransaction();
             $sth = $dbh->prepare($this->_strUpdate);
             $sth->bindParam("userID", $member->getUserID());
-            $sth->bindParam("userPassword", $member->getUserPassword());
             $sth->bindParam("userName", $member->getUserName());
             $sth->bindParam("userEmail", $member->getUserEmail());
             $sth->bindParam("userPhone", $member->getUserPhone());
-            $sth->bindParam("userStatus", $member->getUserStatus());
+            $status = ($member->getUserStatus()) ? 1 : 0;
+            $sth->bindParam("userStatus", $status);
             $sth->execute();
             $dbh->commit();
             $sth = null;

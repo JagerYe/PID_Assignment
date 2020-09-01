@@ -26,7 +26,7 @@ class Api
                 $values = array_values($_POST);
                 break;
             case 'PUT':
-                # code...
+                parse_str(file_get_contents('php://input'), $values);
                 break;
             case 'DELETE':
                 # code...

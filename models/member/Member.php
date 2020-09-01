@@ -8,7 +8,7 @@ class Member implements \JsonSerializable
     private $_userPhone;
     private $_userStatus;
 
-    public function __construct($userID, $userName, $userEmail, $userPhone,$userStatus, $userPassword = 0)
+    public function __construct($userID, $userName, $userEmail, $userPhone, $userStatus, $userPassword = 0)
     {
         $this->setUserID($userID);
         $this->setUserPassword($userPassword);
@@ -24,7 +24,7 @@ class Member implements \JsonSerializable
     }
     public function setUserID($userID)
     {
-        if ($userID == null || $userID == "") {
+        if ($userID === null || $userID == "") {
             throw new Exception("ID格式錯誤");
         }
         $this->_userID = $userID;
@@ -47,7 +47,7 @@ class Member implements \JsonSerializable
     }
     public function setUserName($userName)
     {
-        if ($userName == null || $userName == "") {
+        if ($userName === null || $userName == "") {
             throw new Exception("名字格式錯誤");
         }
         $this->_userName = $userName;
@@ -60,7 +60,7 @@ class Member implements \JsonSerializable
     }
     public function setUserEmail($userEmail)
     {
-        if ($userEmail == null || $userEmail == "") {
+        if ($userEmail === null || $userEmail == "") {
             throw new Exception("email格式錯誤");
         }
         $this->_userEmail = $userEmail;
@@ -73,7 +73,7 @@ class Member implements \JsonSerializable
     }
     public function setUserPhone($userPhone)
     {
-        if ($userPhone == null || $userPhone == "") {
+        if ($userPhone === null || $userPhone == "") {
             throw new Exception("電話錯誤");
         }
         $this->_userPhone = $userPhone;
@@ -86,9 +86,6 @@ class Member implements \JsonSerializable
     }
     public function setUserStatus($userStatus)
     {
-        if ($userStatus == null || $userStatus == "") {
-            throw new Exception("狀態錯誤");
-        }
         $this->_userStatus = $userStatus;
         return true;
     }

@@ -9,7 +9,8 @@ export class MemberViewModel {
                     <div class="col-2">${name}</div>
                     <div class="col-2">
                         <select id="select${id}" name="select${id}" class="custom-select">
-                            ${MemberViewModel.getStatus(status)}
+                            <option value="1">啟用</option>
+                            <option value="0">停用</option>
                         </select>
                     </div>
                     <div class="col-1">
@@ -22,11 +23,11 @@ export class MemberViewModel {
     }
     static getStatus(status) {
         if (status) {
-            return `<option value="open" SELECTED>啟用</option>
-                    <option value="close">停用</option>`;
+            return `<option value="1" SELECTED>啟用</option>
+                    <option value="0">停用</option>`;
         }
-        return `<option value="open">啟用</option>
-                <option value="close" SELECTED>停用</option>`;
+        return `<option value="1">啟用</option>
+                <option value="0" SELECTED>停用</option>`;
 
     }
 }

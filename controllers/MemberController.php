@@ -12,18 +12,19 @@ class MemberController extends Controller
     private function jsonToModel($str)
     {
         $obj = json_decode($str);
-        $member = new Member(
-            $obj->_userID,
-            $obj->_userName,
-            $obj->_userEmail,
-            $obj->_userPhone,
-            $obj->_userStatus,
-            $obj->_userPassword
-        );
-        $password = $member->getUserPassword();
-        if ($password == null || strlen($password) <= 0) {
+        try {
+            $member = new Member(
+                $obj->_userID,
+                $obj->_userName,
+                $obj->_userEmail,
+                $obj->_userPhone,
+                $obj->_userStatus,
+                $obj->_userPassword
+            );
+        } catch (Exception $err) {
             return false;
         }
+
         return $member;
     }
 
@@ -45,7 +46,10 @@ class MemberController extends Controller
         if (!($member = $this->jsonToModel($str))) {
             return false;
         }
-
+        $password = $member->getUserPassword();
+        if ($password == null || strlen($password) <= 0) {
+            return false;
+        }
         if ($this->_dao->insertMemberByObj($member)) {
             return true;
         }
