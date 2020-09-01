@@ -33,7 +33,7 @@ class Commodity implements \JsonSerializable
     }
     public function setCommodityID($commodityID)
     {
-        if ($commodityID == null || $commodityID == "") {
+        if ($commodityID === null || $commodityID == "") {
             throw new Exception("ID格式錯誤");
         }
         $this->_commodityID = $commodityID;
@@ -46,7 +46,7 @@ class Commodity implements \JsonSerializable
     }
     public function setCommodityName($commodityName)
     {
-        if ($commodityName == null || $commodityName == "") {
+        if ($commodityName === null || $commodityName == "") {
             throw new Exception("名稱格式錯誤");
         }
         $this->_commodityName = $commodityName;
@@ -59,7 +59,7 @@ class Commodity implements \JsonSerializable
     }
     public function setCommodityPrice($commodityPrice)
     {
-        if ($commodityPrice == null || !is_numeric($commodityPrice) || $commodityPrice < 0) {
+        if (!is_numeric($commodityPrice) || $commodityPrice < 0) {
             throw new Exception("價格格式錯誤");
         }
         $this->_commodityPrice = $commodityPrice;
@@ -72,7 +72,7 @@ class Commodity implements \JsonSerializable
     }
     public function setCommodityQuantity($commodityQuantity)
     {
-        if ($commodityQuantity == null || !is_numeric($commodityQuantity) || $commodityQuantity < 0) {
+        if (!is_numeric($commodityQuantity) || $commodityQuantity < 0) {
             throw new Exception("數量格式錯誤");
         }
         $this->_commodityQuantity = $commodityQuantity;
@@ -85,7 +85,7 @@ class Commodity implements \JsonSerializable
     }
     public function setCommodityStatus($commodityStatus)
     {
-        if ($commodityStatus == null ||  ($commodityStatus != "open" && $commodityStatus != "close")) {
+        if ($commodityStatus === null ||  ($commodityStatus != "open" && $commodityStatus != "close")) {
             throw new Exception("狀態格式錯誤");
         }
         $this->_commodityStatus = $commodityStatus;

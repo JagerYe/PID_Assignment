@@ -5,7 +5,7 @@ class CommodityDAO_PDO implements CommodityDAO
 {
 
     private $_strInsert = "INSERT INTO `commoditys`(`commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText`) VALUES (:commodityName,:commodityPrice,:commodityQuantity,:commodityStatus,:commodityText);";
-    private $_strUpdate = "UPDATE `commoditys` SET `commodityName`=:commodityName,`commodityPrice`=:commodityPrice,`commodityQuantity`=:commodityQuantity,`commodityStatus`=:commodityStatus,`commodityText`=:commodityText WHERE `commodityID`=:commodityID;";
+    private $_strUpdate = "UPDATE `Commoditys` SET `commodityName`=:commodityName,`commodityPrice`=:commodityPrice,`commodityQuantity`=:commodityQuantity,`commodityStatus`=:commodityStatus,`commodityText`=:commodityText WHERE `commodityID`=:commodityID;";
     private $_strDelete = "DELETE FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strCheckCommodityExist = "SELECT COUNT(*) FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strGetAll = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys`;";
@@ -27,6 +27,7 @@ class CommodityDAO_PDO implements CommodityDAO
             $sth->bindParam("commodityStatus", $status);
             $sth->bindParam("commodityText", $text);
             $sth->execute();
+            $id=$dbh->lastInsertId();
             $dbh->commit();
             $sth = null;
         } catch (PDOException $err) {
@@ -34,7 +35,7 @@ class CommodityDAO_PDO implements CommodityDAO
             return false;
         }
         $dbh = null;
-        return true;
+        return $id;
     }
 
     //新增會員 用物件
@@ -61,7 +62,7 @@ class CommodityDAO_PDO implements CommodityDAO
             $sth->bindParam("commodityQuantity", $commodity->getCommodityQuantity());
             $sth->bindParam("commodityStatus", $commodity->getCommodityStatus());
             $sth->bindParam("commodityText", $commodity->getCommodityText());
-            $sth->bindParam("commodityID", $commodity->getCommodityText());
+            $sth->bindParam("commodityID", $commodity->getCommodityID());
             $sth->execute();
             $dbh->commit();
             $sth = null;
