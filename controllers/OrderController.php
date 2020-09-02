@@ -97,7 +97,7 @@ class OrderController extends Controller
         if (!isset($_SESSION['userID'])) {
             return false;
         }
-        if ($orders = $this->_dao->getOrderByUserID("a01")) {
+        if ($orders = $this->_dao->getOrderByUserID($_SESSION['userID'])) {
             return json_encode($orders);
         }
         return false;

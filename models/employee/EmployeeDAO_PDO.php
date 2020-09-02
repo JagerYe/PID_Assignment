@@ -10,17 +10,19 @@ class EmployeeDAO_PDO implements EmployeeDAO
     private $_strCheckEmployeesExist = "SELECT COUNT(*) FROM `Employees` WHERE `empID`=:empID";
     private $_strGetAll = "SELECT `empID` FROM `Employees`;";
     private $_strGetOne = "SELECT `empID` FROM `Employees` WHERE `empID`=:empID;";
-    private $_strDoLogin = "SELECT COUNT(*) FROM `Employees` WHERE `empID`=:empID AND `empPassword`=:empPassword";
+    private $_strLoginID = "SELECT COUNT(`empID`) FROM `Employees` WHERE `empID`=:empID;";
+    private $_strLoginPassword = "SELECT `empPassword` FROM `Employees` WHERE `empID`=:empID";
+
 
     //新增會員
     public function insertEmployee($id, $password)
     {
-        echo (gettype($id));
         try {
             $dbh = (new Config)->getDBConnect();
             $dbh->beginTransaction();
             $sth = $dbh->prepare($this->_strInsert);
             $sth->bindParam("empID", $id);
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $sth->bindParam("empPassword", $password);
             $sth->execute();
             $dbh->commit();
@@ -46,6 +48,7 @@ class EmployeeDAO_PDO implements EmployeeDAO
             $dbh->beginTransaction();
             $sth = $dbh->prepare($this->_strUpdate);
             $sth->bindParam("empID", $employee->getEmpID());
+            $employee->setEmpPassword(password_hash($employee->getEmpPassword(), PASSWORD_DEFAULT));
             $sth->bindParam("empPassword", $employee->getEmpPassword());
             $sth->execute();
             $dbh->commit();
@@ -125,9 +128,15 @@ class EmployeeDAO_PDO implements EmployeeDAO
     {
         try {
             $dbh = (new Config)->getDBConnect();
-            $sth = $dbh->prepare($this->_strDoLogin);
+            $sth = $dbh->prepare($this->_strLoginID);
             $sth->bindParam("empID", $id);
-            $sth->bindParam("empPassword", $password);
+            $sth->execute();
+            $request = $sth->fetch(PDO::FETCH_NUM);
+            if ($request['0'] != 1) {
+                throw new Exception("帳號密碼錯誤");
+            }
+            $sth = $dbh->prepare($this->_strLoginPassword);
+            $sth->bindParam("empID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_NUM);
             $sth = null;
@@ -136,6 +145,6 @@ class EmployeeDAO_PDO implements EmployeeDAO
             return false;
         }
         $dbh = null;
-        return $request['0'];
+        return password_verify($password, $request['0']);
     }
 }

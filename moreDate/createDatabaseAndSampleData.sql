@@ -16,7 +16,7 @@ CREATE TABLE `Members`(
 DROP TABLE IF EXISTS `Employees`;
 CREATE TABLE `Employees`(
     `empID` VARCHAR(20) NOT NULL,
-    `empPassword` VARCHAR(20) NOT NULL,
+    `empPassword` TEXT NOT NULL,
     PRIMARY KEY (`empID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

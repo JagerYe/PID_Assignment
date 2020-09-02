@@ -160,19 +160,19 @@ class MemberDAO_PDO implements MemberDAO
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_NUM);
             if ($request['0'] != 1) {
-                throw new Exception("帳號錯誤");
+                throw new Exception("帳號密碼錯誤");
             }
             $sth = $dbh->prepare($this->_strLoginPassword);
             $sth->bindParam("userID", $id);
             $sth->execute();
             $request = $sth->fetch(PDO::FETCH_NUM);
+            $sth = null;
         } catch (PDOException $err) {
             echo ($err->__toString());
             return false;
         }
         $dbh = null;
-        $a = password_verify($password, $request['0']);
-        return $a;
+        return password_verify($password, $request['0']);
     }
 
     public function checkMemberExist($id)
