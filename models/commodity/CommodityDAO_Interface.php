@@ -7,4 +7,6 @@ interface CommodityDAO
     public function getOneCommodityByID($id);
     public function getAllCommoditys();
     public function getCheckAndTotal($id, $quantity);
+    public function updateCommodityImg($id, $img);
+    public function getOneCommodityImgByID($id);
 }

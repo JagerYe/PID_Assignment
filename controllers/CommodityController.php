@@ -89,4 +89,16 @@ class CommodityController extends Controller
         }
         return false;
     }
+
+    public function updateOneImg($id, $img)
+    {
+        return $this->_dao->updateCommodityImg($id, $img);
+    }
+
+    public function getOneImg($id)
+    {
+        $filePath = $this->_dao->getOneCommodityImgByID($id);
+        $img = file_get_contents($filePath);
+        return $img;
+    }
 }

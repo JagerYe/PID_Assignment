@@ -32,10 +32,6 @@
 
 	let commodityNewQuantity = 0;
 
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
-	//假資料－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-
 	//更新畫面
 	function updateMenu() {
 		$("#list").empty();
@@ -64,6 +60,8 @@
 			obj.commodityPrice, obj.commodityQuantity, obj.commodityText, obj.commodityStatus, isAdd)
 		);
 		$(`#textarea${obj.commodityID}`).val($(`#textarea${obj.commodityID}`).val().trim())
+
+		//更新按鈕
 		$(`#btn${isAdd ? "Add" : "Update"}${obj.commodityID}`).click(function () {
 			let index = $(this).closest("li").index();
 			let saveOldStatus = obj.commodityStatus;
@@ -92,6 +90,32 @@
 			})
 
 		});
+
+		//圖
+		$(`#commodityImg${obj.commodityID}`).change(() => {
+			let img = $(`#commodityImg${obj.commodityID}`).get(0).files[0];
+			let imageType = /image.*/;
+
+			if (!img.type.match(imageType)) {
+				$(`#listForm${obj.commodityID}`).trigger("reset");
+				return;
+			}
+			let postDate = new FormData();
+			postDate.append("id", obj.commodityID);
+			postDate.append("img", img);
+
+			$.ajax({
+				type: "POST",
+				url: "/PID_Assignment/commodity/updateOneImg",
+				data: postDate,
+				cache: false,
+				contentType: false,
+				processData: false
+			}).then(function (e) {
+				alert(e);
+			});
+		});
+
 	}
 
 	//刪除商品
@@ -121,18 +145,6 @@
 			updateMenu();
 		});
 
-		// //更新
-		// $("#btnUpdateAll").click(() => {
-		// 	commoditys.forEach(item => {
-		// 		item.commodityName = $(`#commodityName${item.commodityID}`).val();
-		// 		item.commodityPrice = $(`#commodityPrice${item.commodityID}`).val();
-		// 		item.commodityQuantity = $(`#commodityQuantity${item.commodityID}`).val();
-		// 		item.commodityStatus = $(`#select${item.commodityID}`).val();
-		// 		item.commodityText = $(`#textarea${item.commodityID}`).val();
-		// 	});
-		// 	updateMenu();
-		// });
-
 		//新增
 		$("#btnAdd").click(() => {
 			// commoditys.push(new Commodity(`new${commodityNewQuantity}`))
@@ -148,6 +160,7 @@
 				if (e) {
 					item.commodityID = e;
 					setItemView(item, true);
+					window.scrollTo(0, document.body.scrollHeight);
 				} else {
 					alert("新增失敗");
 				}
@@ -204,10 +217,11 @@
 			</div>
 			<div class="col-1"></div>
 		</div>
-
 		<ul class="list" id="list">
-
+			<!--清單顯示區-->
 		</ul>
+
+
 
 	</div>
 
@@ -220,7 +234,6 @@
 		</div>
 	</footer>
 	</div>
-
 </body>
 
 </html>

@@ -31,6 +31,13 @@ class Api
                 break;
         }
 
+        if (isset($_FILES['img'])) {
+            $filePaht = $_FILES['img']['tmp_name'];
+            $fileNewPath = "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/img/{$_FILES['img']['name']}";
+            move_uploaded_file($filePaht, $fileNewPath);
+            $values[] = $fileNewPath;
+        }
+
 
         echo call_user_func_array(array($controller, $methodName), $values);
     }

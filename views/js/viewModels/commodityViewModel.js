@@ -76,7 +76,9 @@ export class CommodityViewModel {
             <div class="row">
                 <div class="col-5">
                     更新圖片
-                    <input type="file" name="commodityImg${id}" id="commodityImg${id}">
+                    <form id="listForm${id}">
+                        <input type="file" name="commodityImg${id}" id="commodityImg${id}">
+                    </form>
                 </div>
                 <div class="col-5">
                     <textarea id="textarea${id}" name="textarea${id}" cols="40" rows="5" class="form-control">

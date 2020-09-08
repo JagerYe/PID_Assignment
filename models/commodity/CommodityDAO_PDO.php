@@ -12,8 +12,46 @@ class CommodityDAO_PDO implements CommodityDAO
     private $_strGetOne = "SELECT `commodityID`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus`, `commodityText` FROM `commoditys` WHERE `commodityID`=:commodityID;";
     private $_strCheckAndTotal = "SELECT COUNT(*), SUM(`commodityPrice`*:commodityQuantity) FROM `Commoditys` WHERE `commodityID`=:commodityID AND `commodityPrice`>0 AND `commodityStatus`='open' AND `commodityQuantity`>=:commodityQuantity;";
     //BLOB之後測試
-    // private $_strGetImg = "SELECT `commodityImage` FROM `commoditys` WHERE `commodityID`=:commodityID;";
-    // private $_strUpdateImg = "UPDATE `commoditys` SET `commodityImage`=:commodityImage WHERE `commodityID`=:commodityID";
+    private $_strGetImg = "SELECT `commodityImage` FROM `commoditys` WHERE `commodityID`=:commodityID;";
+    private $_strUpdateImg = "UPDATE `commoditys` SET `commodityImage`=:commodityImage WHERE `commodityID`=:commodityID";
+
+    public function updateCommodityImg($id, $img)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $dbh->beginTransaction();
+            $sth = $dbh->prepare($this->_strUpdateImg);
+            $sth->bindParam("commodityImage", $img, PDO::PARAM_LOB);
+            $sth->bindParam("commodityID", $id);
+            $sth->execute();
+            $dbh->commit();
+            $sth = null;
+        } catch (Exception $err) {
+            $dbh->rollBack();
+            $dbh = null;
+            return false;
+        }
+        $dbh = null;
+        return true;
+    }
+
+    public function getOneCommodityImgByID($id)
+    {
+        try {
+            $dbh = (new Config)->getDBConnect();
+            $sth = $dbh->prepare($this->_strGetImg);
+            $sth->bindParam("commodityID", $id);
+            $sth->execute();
+            $sth->bindColumn(1, $commodityImage, PDO::PARAM_LOB);
+            $sth->fetch(PDO::FETCH_BOUND);
+            $sth = null;
+        } catch (PDOException $err) {
+            echo ($err->__toString());
+            return false;
+        }
+        $dbh = null;
+        return $commodityImage;
+    }
 
     //新增會員
     public function insertCommodity($name, $price, $quantity, $status, $text)
