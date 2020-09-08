@@ -40,7 +40,7 @@
 </style>
 <script type="module" src="/PID_Assignment/views/js/empTitle.js"></script>
 <script type="module">
-	$("body").css
+	// $("body").css
 	import { Member } from "../js/models/member.js";
 	import { Order } from "../js/models/order.js";
 	import { OrderDetail } from "../js/models/orderDetail.js";
@@ -54,18 +54,20 @@
 		$("#list").empty();
 		$("#list").append(`
 			<li class="row">
-				<div class="col-3"><strong>會員圖片</strong></div>
-				<div class="col-2"><strong>帳號</strong></div>
-				<div class="col-2"><strong>電話</strong></div>
-				<div class="col-2"><strong>名稱</strong></div>
-				<div class="col-2"><strong>狀態</strong></div>
-				<div class="col-1"><strong>訂單</strong></div>
+				<div class="col"><strong>會員圖片</strong></div>
+				<div class="col"><strong>帳號</strong></div>
+				<div class="col"><strong>電話</strong></div>
+				<div class="col"><strong>名稱</strong></div>
+				<div class="col"><strong>狀態</strong></div>
+				<div class="col"><strong>帳號創建日期</strong></div>
+				<div class="col"><strong>帳號更動日期</strong></div>
+				<div class="col"><strong>訂單</strong></div>
 			</li>
 		`);
 
 		members.forEach(item => {
 			$("#list").append(
-				MemberViewModel.getManagerView(item.userID, item.userPhone, item.userName, item.userStatus)
+				MemberViewModel.getManagerView(item.userID, item.userPhone, item.userName,  item.creationDate, item.changeDate)
 			);
 
 			//訂單顯示動作
@@ -203,6 +205,8 @@
 					item['_userEmail'],
 					item['_userPhone'],
 					item['_userStatus'],
+					item['_creationDate'],
+					item['_changeDate'],
 					item['_userPassword']
 				);
 
@@ -245,38 +249,7 @@
 		</nav>
 		<br><br><br><br><br><br>
 
-		<ul class="list" id="list">
-
-			<li class="row">
-				<div class="col-3"><strong>會員圖片</strong></div>
-				<div class="col-2"><strong>帳號</strong></div>
-				<div class="col-2"><strong>電話</strong></div>
-				<div class="col-2"><strong>名稱</strong></div>
-				<div class="col-2"><strong>狀態</strong></div>
-				<div class="col-1"><strong>訂單</strong></div>
-			</li>
-			<!-- 一會員 -->
-			<li class="row">
-				<div class="col-3">
-					<img src="/PID_Assignment/views/img/gravatar.jpg"><br>
-				</div>
-				<div class="col-2">帳號</div>
-				<div class="col-2">電話</div>
-				<div class="col-2">名稱</div>
-				<div class="col-2">
-					<select id="select" name="select" class="custom-select">
-						<option value="open">啟用</option>
-						<option value="close">停用</option>
-					</select>
-				</div>
-				<div class="col-1">
-					<button type="button" name="" id="">過往訂單</button>
-				</div>
-			</li><br>
-
-
-
-		</ul>
+		<ul class="list" id="list"></ul>
 
 
 	</div>

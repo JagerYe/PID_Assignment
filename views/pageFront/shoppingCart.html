@@ -63,9 +63,11 @@
 		//更新所有購物車
 		$.ajax({
 			type: "GET",
-			url: `/PID_Assignment/shoppingCart/getAll`
+			url: "/PID_Assignment/shoppingCart/getAll"
 		}).then(function (e) {
 			let objs = JSON.parse(e);
+			$("#total").empty();
+			$("#total").text(`總價格:${objs['total']}`);
 			let shoppingCarts = new Array();
 			for (let item of objs['shoppingCart']) {
 				let shoppingCart = new ShoppingCart(item['_commodityID'], item['_buyQuantity']);
@@ -83,9 +85,6 @@
 					shoppingCartUpdate(shoppingCart)
 				});
 			}
-
-			$("#total").text(`總價格:${objs['total']}`);
-
 		});
 
 		//刪除

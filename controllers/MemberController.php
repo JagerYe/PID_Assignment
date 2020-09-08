@@ -4,6 +4,7 @@ class MemberController extends Controller
     private $_dao;
     public function __construct()
     {
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/controllers/EmployeeController.php";
         require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/member/MemberService.php";
         $this->_dao = (new MemberService())->getDAO();
         $this->model("member");
@@ -28,22 +29,11 @@ class MemberController extends Controller
         return $member;
     }
 
-    public function insert($id, $password, $name, $email, $phone, $status)
-    {
-        if (!preg_match("/\w{6,30}/", $password)) {
-            return false;
-        }
-
-        if ($this->_dao->insertMember($id, $password, $name, $email, $phone, $status)) {
-            return true;
-        }
-        return false;
-    }
-
     public function insertByObj($str)
     {
+        $jsonObj = json_decode($str);
 
-        if (!($member = $this->jsonToModel($str))) {
+        if (!($member = Member::jsonObjToModel($jsonObj))) {
             return false;
         }
         $password = $member->getUserPassword();
@@ -60,7 +50,11 @@ class MemberController extends Controller
 
     public function update($str)
     {
-        if (!($member = $this->jsonToModel($str))) {
+        if (!(EmployeeController::getSessionEmpID() || $this->getSessionUserName())) {
+            return false;
+        }
+        $jsonObj = json_decode($str);
+        if (!($member = Member::jsonObjToModel($jsonObj))) {
             return false;
         }
 
@@ -70,16 +64,11 @@ class MemberController extends Controller
         return false;
     }
 
-    public function delete($id)
-    {
-        if ($this->_dao->deleteMemberByID($id)) {
-            return true;
-        }
-        return false;
-    }
-
     public function getAll()
     {
+        if (!(EmployeeController::getSessionEmpID() || $this->getSessionUserName())) {
+            return false;
+        }
         if ($members = $this->_dao->getAllMember()) {
             return json_encode($members);
         }
@@ -88,6 +77,9 @@ class MemberController extends Controller
 
     public function getOne($id)
     {
+        if (!(EmployeeController::getSessionEmpID() || $this->getSessionUserName())) {
+            return false;
+        }
         if ($member = $this->_dao->getOneMemberByID($id)) {
             $a = json_encode($member);
             return $a;
@@ -98,7 +90,7 @@ class MemberController extends Controller
     public function login($id, $password)
     {
         // $request = ;
-        if ($this->_dao->doLogin($id, $password) == 1) {
+        if ($this->_dao->doLogin($id, $password)) {
             $member = $this->_dao->getOneMemberByID($id);
 
             $_SESSION["userID"] = $member->getUserID();
@@ -117,6 +109,14 @@ class MemberController extends Controller
         return false;
     }
 
+    public function getSessionUserID()
+    {
+        if (isset($_SESSION["userID"])) {
+            return $_SESSION["userID"];
+        }
+        return false;
+    }
+
     public function logout()
     {
         unset($_SESSION['userID']);
@@ -126,5 +126,10 @@ class MemberController extends Controller
     public function checkMemberExist($id)
     {
         return ($this->_dao->checkMemberExist($id)) > 0;
+    }
+
+    public function checkPassword($password)
+    {
+        return $this->_dao->doLogin($_SESSION["userID"], $password);
     }
 }

@@ -97,7 +97,7 @@ class EmployeeController extends Controller
         return false;
     }
 
-    public function getSessionEmpID()
+    public static function getSessionEmpID()
     {
         if (isset($_SESSION['empID'])) {
             return $_SESSION['empID'];

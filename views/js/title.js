@@ -4,7 +4,7 @@ $(window).ready(() => {
         type: "GET",
         url: "/PID_Assignment/member/getSessionUserName"
     }).then(function (e) {
-        $("#userName").text(e);
+        $("#userName").html(`<a href="/PID_Assignment/views/pageFront/updateMemberData.html">${e}</a>`);
         if (e) {
             $("#textLogin").text("登出");
             $("#textregistered").html("");

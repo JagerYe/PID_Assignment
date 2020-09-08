@@ -1,19 +1,21 @@
 export class MemberViewModel {
-    static getManagerView(id, phone, name, status) {
+    static getManagerView(id, phone, name,creationDate,changeDate) {
         return `<li class="row">
-                    <div class="col-3">
+                    <div class="col">
                         <img src="/PID_Assignment/views/img/gravatar.jpg"><br>
                     </div>
-                    <div class="col-2">${id}</div>
-                    <div class="col-2">${phone}</div>
-                    <div class="col-2">${name}</div>
-                    <div class="col-2">
+                    <div class="col">${id}</div>
+                    <div class="col">${phone}</div>
+                    <div class="col">${name}</div>
+                    <div class="col">
                         <select id="select${id}" name="select${id}" class="custom-select">
                             <option value="1">啟用</option>
                             <option value="0">停用</option>
                         </select>
                     </div>
-                    <div class="col-1">
+                    <div class="col">${creationDate}</div>
+                    <div class="col">${changeDate}</div>
+                    <div class="col">
                         <button type="button" name="btnShowOrder${id}" id="btnShowOrder${id}">過往訂單</button>
                     </div>
                 </li>
