@@ -52,7 +52,7 @@
 					jsonObj['_userPassword']
 				);
 
-				$("#userName").val(member.userName);
+				$("#inputUserName").val(member.userName);
 				$("#userEmail").val(member.userEmail);
 				$("#userPhone").val(member.userPhone);
 				$("#userID").val(member.userID);
@@ -71,7 +71,7 @@
 				data: postDate
 			}).then(function (check) {
 				if (check) {
-					member.userName = $("#userName").val();
+					member.userName = $("#inputUserName").val();
 					member.userEmail = $("#userEmail").val();
 					member.userPhone = $("#userPhone").val();
 					let putDate = {
@@ -123,10 +123,12 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-
+					<li class="nav-item active">
+						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">願望清單</a>
+					</li>
 				</ul>
 				<span class="socialheader row">
-					<div class="col" id="userName">userName</div>
+					<div class="col" id="userName"></div>
 					<div class="col">
 						<a id="textLogin" href="/PID_Assignment/views/pageFront/login.html">登入</a>
 					</div>
@@ -137,7 +139,6 @@
 				</span>
 			</div>
 		</nav>
-
 
 		<div class="container">
 
@@ -150,7 +151,7 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text"> <i class="fa fa-user"></i> </span>
 							</div>
-							<input id="userName" class="form-control" placeholder="請輸入姓名" type="text">
+							<input id="inputUserName" class="form-control" placeholder="請輸入姓名" type="text">
 						</div> <!-- form-group// -->
 
 						<div class="form-group input-group">
@@ -182,7 +183,7 @@
 						</div> <!-- form-group// -->
 
 						<div class="form-group">
-							<button type="button" id="btnSub" class="btn btn-primary btn-block"> Create Account</button>
+							<button type="button" id="btnSub" class="btn btn-primary btn-block">更新</button>
 							<a class="btn btn-primary btn-block"
 								href="/PID_Assignment/views/pageFront/updateMemberPassword.html">變更密碼</a>
 						</div> <!-- form-group// -->

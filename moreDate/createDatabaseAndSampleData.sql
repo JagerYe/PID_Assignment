@@ -55,6 +55,16 @@ CREATE TABLE `OrderDetails` (
   FOREIGN KEY (`commodityID`) REFERENCES `Commoditys`(`commodityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `ExpectationList`;
+CREATE TABLE `ExpectationList` (
+  `userID` VARCHAR(20) NOT NULL,
+  `commodityID` int NOT NULL,
+  `creationDate` datetime NOT NULL,
+  PRIMARY KEY (`userID`,`commodityID`),
+  FOREIGN KEY (`userID`) REFERENCES `Members`(`userID`),
+  FOREIGN KEY (`commodityID`) REFERENCES `Commoditys`(`commodityID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO `Members`(`userID`, `userPassword`, `userName`, `userEmail`, `userPhone`, `userStatus`, `creationDate`, `changeDate`) VALUES 
 ('a00001','123456','a01','a01@gmail.com','0911111111',true,NOW(),NOW()),
 ('a00002','123456','a02','a02@gmail.com','0922222222',true,NOW(),NOW()),
