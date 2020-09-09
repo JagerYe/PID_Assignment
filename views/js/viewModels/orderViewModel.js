@@ -12,9 +12,9 @@ export class OrderViewModel {
                 </li>`;
     }
 
-    static getDetailsView(name, price, quantity) {
+    static getDetailsView(id, name, price, quantity) {
         return `<li class="row">
-                    <div class="col-3"><img src="/PID_Assignment/views/img/gravatar.jpg"></div>
+                    <div class="col-3"><img src="/PID_Assignment/commodity/getOneImg?id=${id}"  onerror="this.onerror = null; this.src='/PID_Assignment/views/img/gravatar.jpg'"></div>
                     <div class="col-3">${name}</div>
                     <div class="col-3">${price}</div>
                     <div class="col-3">${quantity}</div>

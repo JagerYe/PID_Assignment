@@ -32,10 +32,16 @@ class Api
         }
 
         if (isset($_FILES['img'])) {
+            // $filePaht = $_FILES['img']['tmp_name'];
+            // $fileNewPath = "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/img/{$_FILES['img']['name']}";
+            // move_uploaded_file($filePaht, $fileNewPath);
+
             $filePaht = $_FILES['img']['tmp_name'];
-            $fileNewPath = "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/img/{$_FILES['img']['name']}";
+            $fileNewPath = "/Applications/MAMP/tmp/php/" . $_FILES['img']['name'];
             move_uploaded_file($filePaht, $fileNewPath);
             $values[] = $fileNewPath;
+
+            // $values[] = "/Applications/MAMP/tmp/php/1572514255-593955842.jpg";
         }
 
 

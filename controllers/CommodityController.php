@@ -97,8 +97,6 @@ class CommodityController extends Controller
 
     public function getOneImg($id)
     {
-        $filePath = $this->_dao->getOneCommodityImgByID($id);
-        $img = file_get_contents($filePath);
-        return $img;
+        return $this->_dao->getOneCommodityImgByID($id);
     }
 }

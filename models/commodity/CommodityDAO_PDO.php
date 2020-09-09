@@ -13,7 +13,7 @@ class CommodityDAO_PDO implements CommodityDAO
     private $_strCheckAndTotal = "SELECT COUNT(*), SUM(`commodityPrice`*:commodityQuantity) FROM `Commoditys` WHERE `commodityID`=:commodityID AND `commodityPrice`>0 AND `commodityStatus`='open' AND `commodityQuantity`>=:commodityQuantity;";
     //BLOB之後測試
     private $_strGetImg = "SELECT `commodityImage` FROM `commoditys` WHERE `commodityID`=:commodityID;";
-    private $_strUpdateImg = "UPDATE `commoditys` SET `commodityImage`=:commodityImage WHERE `commodityID`=:commodityID";
+    private $_strUpdateImg = "UPDATE `commoditys` SET `commodityImage`=LOAD_FILE(:commodityImage) WHERE `commodityID`=:commodityID";
 
     public function updateCommodityImg($id, $img)
     {

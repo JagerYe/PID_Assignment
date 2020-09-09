@@ -144,11 +144,12 @@
 					item['_orderID'],
 					item['_commodityName'],
 					item['_orderCommodityPrice'],
-					item['_orderCommodityQuantity']
+					item['_orderCommodityQuantity'],
+					item['_commodityID']
 				);
 
 				$(`#orderDetails${id}`)
-					.append(OrderViewModel.getDetailsView(orderDetail.commodityNane,
+					.append(OrderViewModel.getDetailsView(orderDetail.commodityID, orderDetail.commodityNane,
 						orderDetail.orderCommodityPrice, orderDetail.orderCommodityQuantity));
 			}
 		});

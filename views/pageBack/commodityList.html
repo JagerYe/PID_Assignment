@@ -87,11 +87,34 @@
 				data: putData
 			}).then(() => {
 				updateMenu();
-			})
+			});
+
+			//圖片上傳動作
+			let img;
+			if ((img = $(`#commodityImg${obj.commodityID}`).get(0).files[0])) {
+				let postDate = new FormData();
+				postDate.append("id", obj.commodityID);
+				postDate.append("img", img);
+
+				$.ajax({
+					type: "POST",
+					url: "/PID_Assignment/commodity/updateOneImg",
+					data: postDate,
+					cache: false,
+					contentType: false,
+					processData: false
+				}).then(function (e) {
+					if (e) {
+						updateMenu();
+					} else {
+						alert("圖片更新失敗");
+					}
+				});
+			}
 
 		});
 
-		//圖
+		//圖片更動時
 		$(`#commodityImg${obj.commodityID}`).change(() => {
 			let img = $(`#commodityImg${obj.commodityID}`).get(0).files[0];
 			let imageType = /image.*/;
@@ -100,20 +123,14 @@
 				$(`#listForm${obj.commodityID}`).trigger("reset");
 				return;
 			}
-			let postDate = new FormData();
-			postDate.append("id", obj.commodityID);
-			postDate.append("img", img);
 
-			$.ajax({
-				type: "POST",
-				url: "/PID_Assignment/commodity/updateOneImg",
-				data: postDate,
-				cache: false,
-				contentType: false,
-				processData: false
-			}).then(function (e) {
-				alert(e);
-			});
+			let fileReader = new FileReader();
+			fileReader.onload = function (e) {
+				$(`#imgShow${obj.commodityID}`).attr("src", e.target.result);
+			}
+			fileReader.readAsDataURL(img);
+
+
 		});
 
 	}

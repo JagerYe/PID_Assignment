@@ -1,9 +1,10 @@
 export class OrderDetail {
-    constructor(orderID, commodityNane, orderCommodityPrice, orderCommodityQuantity) {
+    constructor(orderID, commodityNane, orderCommodityPrice, orderCommodityQuantity, commodityID) {
         this._orderID = orderID;
         this._commodityNane = commodityNane;
         this._orderCommodityPrice = orderCommodityPrice;
         this._orderCommodityQuantity = orderCommodityQuantity;
+        this._commodityID = commodityID;
     }
 
     get orderID() {
@@ -32,5 +33,12 @@ export class OrderDetail {
     }
     set orderCommodityQuantity(orderCommodityQuantity) {
         this._orderCommodityQuantity = orderCommodityQuantity;
+    }
+
+    get commodityID() {
+        return this._commodityID;
+    }
+    set commodityID(commodityID) {
+        this._commodityID = commodityID;
     }
 }
