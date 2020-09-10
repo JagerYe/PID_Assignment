@@ -1,11 +1,12 @@
-export class Commodity {
-    constructor(userID, commodityID, creationDate = "", commodityName = "", commodityPrice = 0, commodityStatus = "close") {
+export class ExpectationList {
+    constructor(commodityID, userID = "", creationDate = "", commodityName = "", commodityPrice = 0, commodityQuantity = 0, commodityStatus = "close") {
         this._userID = userID;
         this._commodityID = commodityID;
         this._creationDate = creationDate;
         this._commodityName = commodityName;
         this._commodityPrice = commodityPrice;
         this._commodityStatus = commodityStatus;
+        this._commodityQuantity = commodityQuantity;
     }
 
     get userID() {
@@ -48,5 +49,12 @@ export class Commodity {
     }
     set commodityStatus(commodityStatus) {
         this._commodityStatus = commodityStatus;
+    }
+
+    get commodityQuantity() {
+        return this._commodityQuantity;
+    }
+    set commodityQuantity(commodityQuantity) {
+        this._commodityQuantity = commodityQuantity;
     }
 }

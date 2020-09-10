@@ -17,7 +17,7 @@ export class CommodityViewModel {
                 </div>`;
     }
 
-    static getOneCommodityView(id, name, text, price, quantity) {
+    static getOneCommodityView(id, name, text, price, quantity, isExpectation = false) {
         return `
             <img src="/PID_Assignment/commodity/getOneImg?id=${id}"  onerror="this.onerror = null; this.src='/PID_Assignment/views/img/gravatar.jpg'">
             <h1 class="author-title">${name}</h1>
@@ -27,8 +27,17 @@ export class CommodityViewModel {
                 數量<input id="commodityQuantity" name="commodityQuantity" 
                     type="number" min="0" max="${quantity}" value="1">
             </h3>
-            <button id="addInCart" name="addInCart" type="button" class="btn btn-primary">加入購物車</button>
+            <button id="addInCart" name="addInCart" type="button" class="btn btn-primary">加入購物車</button><br><br>
+            ${CommodityViewModel.setExpectationBtu(isExpectation)}
         `;
+    }
+
+    static setExpectationBtu(isExpectation) {
+        if (isExpectation) {
+            return '<input disabled="disabled" type="button" class="btn-secondary" value="已加入願望清單">';
+        } else {
+            return '<button id="addInExpectation" name="addInExpectation" type="button" class="btn btn-info">加入願望清單</button>';
+        }
     }
 
     static getShoppingCartView(name, price, commodityQuantity, buyQuantity, id) {

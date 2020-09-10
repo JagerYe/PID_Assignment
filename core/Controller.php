@@ -8,7 +8,7 @@ class Controller
     }
 
     public function requireDAO($modelName){
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/RD1_Assignment/models/$modelName/{$modelName}Service.php";
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/RD1_Assignment/models/$modelName/$modelName.php"; 
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/$modelName/{$modelName}Service.php";
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/PID_Assignment/models/$modelName/$modelName.php"; 
     }
 }

@@ -30,135 +30,79 @@
 		margin: 5px;
 		max-height: 100px;
 	}
+
+	.item {
+		margin: 10px;
+	}
 </style>
 <script type="module" src="/PID_Assignment/views/js/title.js"></script>
-<!-- <script type="module">
-	import { Commodity } from "../js/models/commodity.js";
+<script type="module">
+	import { ExpectationList } from "../js/models/expectationList.js";
 	import { ShoppingCart } from "../js/models/shoppingCart.js";
 
-	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
+	import { ExpectationListViewModel } from "../js/viewModels/expectationListViewModel.js";
 
-	//更新畫面
-	function updateMenu() {
-		let total = 0;
-		$("#shoppingCartList").html("");
-
-		//更新所有商品列表
-		let commoditys = new Array();
+	function updateView() {
 		$.ajax({
 			type: "GET",
-			url: "/PID_Assignment/commodity/getAll",
-			async: false
+			url: "/PID_Assignment/expectationList/getAll"
 		}).then(function (e) {
-			let objs = JSON.parse(e);
-			for (let item of objs) {
-				let commodity = new Commodity(
-					item['_commodityID'],
-					item['_commodityName'],
-					item['_commodityPrice'],
-					item['_commodityQuantity'],
-					item['_commodityStatus'],
-					item['_commodityText']
-				);
+			let jsonArr = JSON.parse(e);
+			let layoutStr = "";
+			for (let jsonObj of jsonArr) {
+				$(".mainShow").append(ExpectationListViewModel.getListView(
+					jsonObj['_commodityID'],
+					jsonObj['_commodityName'],
+					jsonObj['_commodityPrice'],
+					jsonObj['_commodityQuantity'],
+					jsonObj['_creationDate']
+				));
 
-				commoditys.push(commodity);
-			}
-
-		});
-
-		//更新所有購物車
-		$.ajax({
-			type: "GET",
-			url: "/PID_Assignment/shoppingCart/getAll"
-		}).then(function (e) {
-			let objs = JSON.parse(e);
-			$("#total").empty();
-			$("#total").text(`總價格:${objs['total']}`);
-			let shoppingCarts = new Array();
-			for (let item of objs['shoppingCart']) {
-				let shoppingCart = new ShoppingCart(item['_commodityID'], item['_buyQuantity']);
-				shoppingCarts.push(shoppingCart);
-				let commodity = commoditys.find(obj => obj.commodityID == shoppingCart.commodityID);
-				$("#shoppingCartList")
-					.append(CommodityViewModel.getShoppingCartView(commodity.commodityName,
-						commodity.commodityPrice, commodity.commodityQuantity, shoppingCart.buyQuantity, shoppingCart.commodityID));
-
-				$(`#commodityDelete${shoppingCart.commodityID}`).click(function () {
-					shoppingCartDelete(shoppingCart.commodityID);
-
+				$(`#delete${jsonObj['_commodityID']}`).click(() => {
+					deleteItem(jsonObj['_commodityID']);
 				});
-				$(`#commodityQuantity${shoppingCart.commodityID}`).change(function () {
-					shoppingCartUpdate(shoppingCart)
+
+				$(`#btnBuy${jsonObj['_commodityID']}`).click(() => {
+					buyItem(jsonObj['_commodityID']);
 				});
 			}
 		});
-
-		//刪除
-		function shoppingCartDelete(id) {
-			let deleteDate = {
-				id: id
-			}
-			$.ajax({
-				type: "DELETE",
-				url: "/PID_Assignment/shoppingCart/delete",
-				data: deleteDate
-			}).then(function (e) {
-				if (e) {
-					updateMenu();
-				}
-			});
-		}
-
-		//更新購物車
-		function shoppingCartUpdate(shoppingCart) {
-			shoppingCart.buyQuantity = $(`#commodityQuantity${shoppingCart.commodityID}`).val();
-			let putDate = {
-				shoppingCart: JSON.stringify(shoppingCart)
-			}
-			$.ajax({
-				type: "DELETE",
-				url: "/PID_Assignment/shoppingCart/updateByObj",
-				data: putDate
-			}).then(function (e) {
-				if (e) {
-					updateMenu();
-				}
-			});
-		}
 	}
 
+	function deleteItem(id) {
+		$.ajax({
+			type: "DELETE",
+			url: "/PID_Assignment/expectationList/delete",
+			data: { 0: id }
+		}).then(function (e) {
+			if (e === "1") {
+				$(`#item${id}`).empty();
+			} else {
+				alert("刪除失敗");
+			}
+		});
+	}
 
+	function buyItem(id) {
+		let shoppingCart = new ShoppingCart(id, $(`#buyQuantity${id}`).val());
+		if (shoppingCart.buyQuantity <= 0) {
+			alert("購買數量請大於0");
+		}
+		$.ajax({
+			type: "POST",
+			url: "/PID_Assignment/shoppingCart/addByObj",
+			data: { 0: JSON.stringify(shoppingCart) }
+		}).then(function (e) {
+			if (e === "1") {
+				alert("放入購物車");
+			}
+		});
+	}
 
 	$(window).ready(() => {
-		//結帳事件
-		$("#checkout").click(() => {
-			if (($("#userName").text()).length <= 0) {
-				alert("請先登入");
-				window.location.href = "/PID_Assignment/views/pageFront/login.html";
-				return;
-			}
-			let date = new Date();
-			let now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-			let postData = {
-				date: now
-			};
-			$.ajax({
-				type: "POST",
-				url: "/PID_Assignment/order/checkout",
-				data: postData
-			}).then(function (e) {
-				if (e) {
-					alert("成功");
-					window.location.href = "/PID_Assignment/views/pageFront/order.html";
-				} else {
-					alert("失敗");
-				}
-			});
-		});
-
-		updateMenu();
+		updateView();
 	});
-</script> -->
+</script>
 
 <body class="author-template">
 	<div class="site-wrapper">
@@ -185,7 +129,9 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-
+					<li class="nav-item active">
+						<a class="nav-link" href="/PID_Assignment/views/pageFront/expectationList.html">願望清單</a>
+					</li>
 				</ul>
 				<span class="socialheader row">
 					<div class="col" id="userName">userName</div>
@@ -200,31 +146,7 @@
 			</div>
 		</nav>
 		<br><br><br><br><br><br>
-		<div class="mainShow">
-			<div class="row">
-				<div class="col-4">
-					<img src="/PID_Assignment/img/1572514255-593955842.jpg" alt="">
-				</div>
-				<div class="col-8">
-					<div>
-						<h2>Name</h2>
-					</div>
-					<div class="row">
-						<div class="col"></div>
-						<div class="col-1 btn-secondary">
-							價錢
-						</div>
-						<div class="col-2"><input class="form-control" type="number" name="" id=""></div>
-						<div class="col-1"><button class="btn btn-success">Buy</button></div>
-					</div>
-					<div class="row">
-						<div class="col-2">新增日期</div>
-						<div class="col-1"><button class="btn btn-link">delete</button></div>
-					</div>
-				</div>
-			</div>
-
-		</div>
+		<div class="mainShow"></div>
 		<br><br>
 		<footer class="site-footer clearfix">
 			<a href="#top" id="back-to-top" class="back-top"></a>

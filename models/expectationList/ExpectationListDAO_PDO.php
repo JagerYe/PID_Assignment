@@ -7,10 +7,10 @@ class ExpectationListDAO_PDO implements ExpectationListDAO
     private $_strInsert = "INSERT INTO `ExpectationList`(`userID`, `commodityID`, `creationDate`)
                             VALUES (:userID,:commodityID,NOW());";
     private $_strDelete = "DELETE FROM `ExpectationList` WHERE `userID`=:userID AND `commodityID`=:commodityID;";
-    private $_strCheckExpectationListExist = "SELECT COUNT(*) FROM `ExpectationLists` WHERE `userID`=:userID AND `commodityID`=:commodityID;";
-    private $_strGetMemberAll = "SELECT `userID`, e.`commodityID`, `creationDate`, `commodityName`, `commodityPrice`, `commodityStatus` FROM `ExpectationList` AS e
+    private $_strCheckExpectationListExist = "SELECT COUNT(*) FROM `ExpectationList` WHERE `userID`=:userID AND `commodityID`=:commodityID;";
+    private $_strGetMemberAll = "SELECT `userID`, e.`commodityID`, `creationDate`, `commodityName`, `commodityPrice`, `commodityQuantity`, `commodityStatus` FROM `ExpectationList` AS e
                                     INNER JOIN `Commoditys` AS c ON e.`commodityID` = c.`commodityID`
-                                    WHERE `userID`='a00001' AND `commodityStatus`='open';";
+                                    WHERE `userID`=:userID AND `commodityStatus`='open';";
 
     //新增會員
     public function insertExpectationList($userID, $commodityID)
@@ -64,9 +64,10 @@ class ExpectationListDAO_PDO implements ExpectationListDAO
     {
         try {
             $dbh = (new Config)->getDBConnect();
-            $sth = $dbh->query($this->_strGetMemberAll);
+            $sth = $dbh->prepare($this->_strGetMemberAll);
+            $sth->bindParam("userID", $id);
+            $sth->execute();
             $request = $sth->fetchAll(PDO::FETCH_ASSOC);
-
             $sth = null;
         } catch (PDOException $err) {
             $dbh->rollBack();

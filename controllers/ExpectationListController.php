@@ -21,7 +21,10 @@ class ExpectationListController extends Controller
 
     public function getAll()
     {
-        return ExpectationListService::getDAO()->getMemberAllExpectationList($_SESSION['userID']);
+        $arr = ExpectationListService::getDAO()->getMemberAllExpectationList($_SESSION['userID']);
+
+        $json = json_encode($arr);
+        return $json;
     }
 
     public function checkExist($commodityID)

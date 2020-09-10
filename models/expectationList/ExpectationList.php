@@ -7,35 +7,31 @@ class ExpectationList implements \JsonSerializable
 
     private $_commodityName;
     private $_commodityPrice;
+    private $_commodityQuantity;
     private $_commodityStatus;
 
-    public static function jsonObjToModel($jsonObj)
+    public static function jsonObjToModel($str)
     {
         return new ExpectationList(
-            $jsonObj->_userID,
-            $jsonObj->_commodityID
+            $_SESSION['userID'],
+            $str
         );
     }
 
     public static function dbArrToModel($requestArr)
     {
-        $checkObj = new ExpectationList("a00000", 11111);
         foreach ($requestArr as $item) {
-            $checkObj->setUserID($item["userID"]);
-            $checkObj->setCommodityID($item["commodityID"]);
-            $checkObj->setCreationDate($item["creationDate"]);
-            $checkObj->setCommodityName($item["commodityName"]);
-            $checkObj->setCommodityPrice($item["commodityPrice"]);
-            $checkObj->setCommodityStatus($item["commodityStatus"]);
-            $expectationLists[] = (object)[
-                "userID" => $checkObj->getUserID(),
-                "commodityID" => $checkObj->getCommodityID(),
-                "creationDate" => $checkObj->getCreationDate(),
-                "commodityName" => $checkObj->getCommodityName(),
-                "commodityPrice" => $checkObj->getCommodityPrice(),
-                "commodityStatus" => $checkObj->getCommodityStatus()
-            ];
+            $expectationLists[] = new ExpectationList(
+                $item["userID"],
+                $item["commodityID"],
+                $item["creationDate"],
+                $item["commodityName"],
+                $item["commodityPrice"],
+                $item["commodityQuantity"],
+                $item["commodityStatus"]
+            );
         }
+        return $expectationLists;
     }
 
     public function __construct(
@@ -44,6 +40,7 @@ class ExpectationList implements \JsonSerializable
         $creationDate = null,
         $commodityName = null,
         $commodityPrice = null,
+        $commodityQuantity = null,
         $commodityStatus = null
     ) {
         $this->setUserID($userID);
@@ -51,6 +48,7 @@ class ExpectationList implements \JsonSerializable
         $this->setCreationDate($creationDate);
         $this->setCommodityName($commodityName);
         $this->setCommodityPrice($commodityPrice);
+        $this->setCommodityQuantity($commodityQuantity);
         $this->setCommodityStatus($commodityStatus);
     }
 
@@ -107,6 +105,16 @@ class ExpectationList implements \JsonSerializable
     public function setCommodityPrice($commodityPrice)
     {
         $this->_commodityPrice = $commodityPrice;
+        return true;
+    }
+
+    public function getCommodityQuantity()
+    {
+        return $this->_commodityQuantity;
+    }
+    public function setCommodityQuantity($commodityQuantity)
+    {
+        $this->_commodityQuantity = $commodityQuantity;
         return true;
     }
 

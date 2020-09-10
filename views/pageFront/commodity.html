@@ -29,6 +29,7 @@
 <script type="module">
 	import { Commodity } from "../js/models/commodity.js";
 	import { ShoppingCart } from "../js/models/shoppingCart.js";
+	import { ExpectationList } from "../js/models/expectationList.js";
 
 	import { CommodityViewModel } from "../js/viewModels/commodityViewModel.js";
 
@@ -49,6 +50,13 @@
 	};
 
 	let commodityID = getUrlParameter("commodityID");
+	let isExpectation;
+	$.ajax({
+		type: "GET",
+		url: `/PID_Assignment/expectationList/checkExist?commodityID=${commodityID}`
+	}).then(function (e) {
+		isExpectation = (e === "1") ? true : false;
+	});
 
 	$(window).ready(() => {
 
@@ -73,7 +81,8 @@
 					commodity.commodityName,
 					commodity.commodityText,
 					commodity.commodityPrice,
-					commodity.commodityQuantity
+					commodity.commodityQuantity,
+					isExpectation
 				)
 			);
 
@@ -81,8 +90,24 @@
 				// 加入購物車動作
 				addInShoppingCart(commodity.commodityID);
 			});
+
+			$("#addInExpectation").click(() => {
+				addExpectation(commodity.commodityID);
+			});
 		});
 	});
+
+	function addExpectation(id) {
+		$.ajax({
+			type: "POST",
+			url: `/PID_Assignment/expectationList/insertByObj`,
+			data: { 1: id }
+		}).then(function (e) {
+			if (e === "1") {
+				history.go(0);
+			}
+		});
+	}
 
 	// 加入購物車動作
 	function addInShoppingCart(id) {
@@ -127,7 +152,9 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/PID_Assignment/views/pageFront/shoppingCart.html">購物車</a>
 					</li>
-
+					<li class="nav-item active">
+						<a class="nav-link" href="/PID_Assignment/views/pageFront/expectationList.html">願望清單</a>
+					</li>
 				</ul>
 				<span class="socialheader row">
 					<div class="col" id="userName">userName</div>

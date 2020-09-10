@@ -28,18 +28,6 @@ class CommodityController extends Controller
         return $commodity;
     }
 
-    // public function insert($id, $password, $name, $email, $phone, $status)
-    // {
-    //     if ($password == null || strlen($password) <= 0) {
-    //         return false;
-    //     }
-
-    //     if ($this->_dao->insertCommodity($id, $password, $name, $email, $phone, $status)) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
     public function insertByObj($str)
     {
 
